@@ -1,48 +1,74 @@
 import React from "react";
-import LoginButtons from "./LoginButtons";
 import LoginInputFields from "./LoginInputFields";
+import ToggleButton from "./ToggleButton";
 
 
 class LoginPage extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            inputFields:[
-                {label: "Your E-Mail Address*",
-                 inputID: "email"}, 
-                 {label: "Create Password*",
-                 inputID: "password"},
-                 {label: "Confirm Passwork*",
-                 inputID: "passwordConfirm"},
-                 {label: "First Name*",
-                 inputID: "FName"},
-                 {label: "Surename*",
-                 inputID: "surename"},
-                 {label: "Postal Code*",
-                 inputID: "postcode"},
-            ]
-        };
-        // this.displayInputFields = this.displayInputFields.bind(this)
+            user:{
+                fName:"",
+                email:"",
+                password:"",
+                passwordConfirm:"",
+                postCode:"", 
+                surename:""
+            },
+        selectedInitialOperation: "other" 
+        }
+        ;
+        this.updateSelectedInitOpState = this.updateSelectedInitOpState.bind(this)
+        this.updateInputState = this.updateInputState.bind(this)
+    }
+    
+    updateSelectedInitOpState(val){
+        this.setState({selectedInitialOperation: val})
+        console.log(this.state.selectedInitialOperation)
     }
 
-    // displayInputFields = ()=>{
-    //     let inputFields = this.state.inputFields
-    //     inputFields.map(field => console.log(field.label)
-    //     <LoginButtons/>
 
-    //     )            
-
-    // }
+    updateInputState(inputID, inputValue){
+        this.setState((prevState) => ({user: {...prevState.user, [inputID]: inputValue}}))
+        setTimeout(() => console.log(this.state.user.email))
+    }
 
     render(){
-        let inputFields = this.state.inputFields
-        
+        let inputFields = [
+            {label: "Your E-Mail Address*",
+             inputID: "email"}, 
+             {label: "Create Password*",
+             inputID: "password"},
+             {label: "Confirm Password*",
+             inputID: "passwordConfirm", 
+            },
+             {label: "First Name*",
+             inputID: "FName"},
+             {label: "Surename*",
+             inputID: "surename"},
+             {label: "Postal Code*",
+             inputID: "postcode"},
+        ]
+            
 
         return(
-            <div>
-                {inputFields.map((field) => {return <LoginInputFields label = {field.label} id={field.inputID} key={field.inputID}/>})}
-                <LoginButtons/>
-            </div>
+            <form>
+                <ToggleButton 
+                    selected = {this.state.selectedInitialOperation}
+                    stateUpdater = {this.updateSelectedInitOpState}
+                    label = "Test"
+                    />
+
+                {inputFields.map((field) => 
+                    {return <LoginInputFields 
+                        label = {field.label} 
+                        id={field.inputID} 
+                        key={field.inputID} 
+                        value={this.state.value}
+                        onChange ={this.updateInputState}
+                        />})}
+
+            </form>
         )
     }
 }
