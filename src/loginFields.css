@@ -1,0 +1,19 @@
+.divStyle{
+        display: flex; 
+        flex-direction: column;
+        width: 50%
+    }
+
+.inputLabel{
+        line-height: "2rem"
+    }
+
+.inputBox{
+        
+    }
+
+.errorMessageStyle{
+        color: red; 
+        font-size: 12px 
+    }
+
