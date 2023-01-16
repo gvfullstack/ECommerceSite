@@ -1,73 +1,190 @@
 import React from "react";
 import LoginInputFields from "./LoginInputFields";
 import ToggleButton from "./ToggleButton";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
+import {ReactComponent as FacebookLogo} from './images/facebook-square.svg';
+import "./loginFields.css"
 
+const element = <FontAwesomeIcon icon={faEye} />
 
 class LoginPage extends React.Component{
     constructor(props){
         super(props);
-        this.state = {  
-            user:{
-                fName : "",
-                email : "",
-                password : "",
-                passwordConfirm : "",
-                postCode : "", 
-                surename : "" 
-            },       
-            toggleButton: "signIn" 
+        this.state = {       
+            inputRef : React.createRef(),
+            toggleButton: "signIn", 
+            inputFieldsData: [
+                {label: "Your E-Mail Address*", inputID: "email", visibility:"create", type: "email", masked:"text", value:"", error:"", showError:false}, 
+                {label: "Create Password*", inputID: "password", visibility:"create", type: "password", icon:element, masked:"password", value:"", error:"", showError:false},
+                {label: "Confirm Password*", inputID: "passwordConfirm", visibility:"create", type: "passwordConfirm", icon:element, masked:"password", value:"", error:"", showError:false},
+                {label: "First Name*", inputID: "fName", visibility:"create", type:"name",masked:"text", value:"", error:"", showError:false},
+                {label: "Surename*", inputID: "surename", visibility:"create", type:"name", masked:"text", value:"", error:"", showError:false},
+                {label: "Postal Code*", inputID: "postCode", visibility:"create", type: "zipCode", masked:"text", value:"", error:"", showError:false},
+                {label: "Sign In E-Mail*", inputID: "signInEmail", visibility:"signIn", type: "email", masked:"text", value:"", error:"", showError:false},
+                {label: "Sign In Password*", inputID: "signInPassword", visibility:"signIn", type: "passwordSignIn", icon:element, masked:"password", value:"", error:"", showError:false}
+            ],
+            submitError: ""
         }
         ;
         this.updateToggleButton = this.updateToggleButton.bind(this)
-        this.updateInputState = this.updateInputState.bind(this)
+        this.updateInputFieldsValueState = this.updateInputFieldsValueState.bind(this)
+        this.getSpecificField = this.getSpecificField.bind(this)
+
 
     }
     
     updateToggleButton(val){
-        this.setState({toggleButton: val})
-        console.log(this.state.toggleButton)
+        this.props.updatePageDisplayed(val)
     }
 
-    updateInputState = (inputID, inputValue) => {
-        this.setState((prevState) => ({user: {...prevState.user, [inputID]: inputValue}}))
+    updateInputFieldsValueState = (value, key) =>{
+        this.setState({inputFieldsData: this.state.inputFieldsData.map((field, index)=>{
+            if(key === index){
+                return {...field, value: value} 
+            }
+            else{return field}
+        })}
+        )
     }
 
-    render(){
-        let inputFieldsData = [
-            {label: "Your E-Mail Address*", inputID: "email", visibility:"create", type: "email"}, 
-            {label: "Create Password*", inputID: "password", visibility:"create", type: "password"},
-            {label: "Confirm Password*", inputID: "passwordConfirm", visibility:"create", type: "passwordConfirm"},
-            {label: "First Name*", inputID: "FName", visibility:"create", type:"name"},
-            {label: "Surename*", inputID: "surename", visibility:"create", type:"name"},
-            {label: "Postal Code*", inputID: "postcode", visibility:"create", type: "zipCode"},
-            {label: "Sign In E-Mail*", inputID: "signInEmail", visibility:"signIn", type: "email"},
-            {label: "Sign In Password*", inputID: "signInPassword", visibility:"signIn", type: "passwordSignIn"}
-        ]
+    updateError = (key, textMessage, display) =>{
+        this.setState({inputFieldsData: this.state.inputFieldsData.map((field, index)=>{
+            if(key === index){
+                return {...field, error: textMessage, showError: display} 
+            }
+            else{return field}
+        })}
+        )
+    }
+
+    handleSaveUser = (e)=>{
+        e.preventDefault()
+        
+        let validationErrorsExist = this.state.inputFieldsData.map((field)=>{
+            if(field.visibility === "create"){return (field.error !== "" || field.value === "") ? true: false}
+                else{return false}})
+
+        let errorMesage = "";
+
+        if(validationErrorsExist.includes(true)){
+            errorMesage = "Please correct all the errors before saving"
+            this.setState({submitError: errorMesage}) 
+        }       
+        
+        else if(this.props.users.map((user)=>{
+            let email = this.getSpecificField("email")
+            return user.email === email ? true: false
+        }).includes(true)){
+            errorMesage = "This E-Mail address already exists"
+            this.setState({submitError: errorMesage})
+            }
+
+        else{
+            let newUserObj = {};
             
-        let inputFields = inputFieldsData.map((field) => 
-            {return <LoginInputFields 
+            this.state.inputFieldsData.forEach((field)=>{
+                let newPair = {[field.inputID]: field.value}
+                Object.assign(newUserObj, newPair)
+            })
+            
+            this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=> {
+                        return {...field, value:"", error:"", showError:false}
+                    })
+            })
+
+            this.props.userAdd(newUserObj)
+        }
+    }
+
+    listUsers = () =>{
+        console.log(this.props.users)
+    }
+    handleSignIn = (e) =>{
+        e.preventDefault()
+        let email = this.getSpecificField("signInEmail")
+        let password = this.getSpecificField("signInPassword")
+        let user = this.props.users.filter((user)=>{
+            return user.email === email && user.password === password ? true: false
+        })
+        if(user.length === 0){
+            this.setState({submitError: "Wrong E-Mail or Password"})
+        }
+        else{
+            this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=> {
+                return {...field, value:"", error:"", showError:false}
+                  })
+             })
+            console.log("you are signed in")
+            this.props.setLoggedInUser(email)
+        }
+    }
+
+    getSpecificField = (fieldID) => {for (const element of this.state.inputFieldsData) {
+        if(element.inputID === fieldID){
+            return element.value
+        }
+        }
+    }
+   
+
+    render(){ 
+        let inputFieldsData = this.state.inputFieldsData
+
+
+        let inputFields = inputFieldsData.map((field, index) => 
+        {
+                return <LoginInputFields 
                 label = {field.label} 
                 id={field.inputID} 
-                key={field.inputID} 
-                value={this.state.value}
-                toggleButton =  {this.state.toggleButton}
+                index={index} 
+                toggleButton =  {this.props.pageDisplay}
                 visibility = {field.visibility}
                 inputtype = {field.type}
-                onChange = {this.updateInputState}
-                password = {this.state.user.password}
+                onChange = {this.updateInputFieldsValueState}
+                password = {this.getSpecificField("password")}
+                icon = {field.icon}
+                masked = {field.masked}
+                value = {field.value}
+                ref = {this.inputRef}
+                error = {field.error}
+                showError = {field.showError}
+                updateError = {this.updateError}
                 />})
 
+
         return(
-            <div>
-        
-            <ToggleButton 
-                    toggleButton = {this.state.toggleButton}
-                    stateUpdater = {this.updateToggleButton}
-                    />
-            <form>
-                {inputFields} 
-                           
-            </form>
+            <div >
+                <div className = "loginPage">
+                    <button onClick={this.listUsers}>display Users</button>
+
+                    <ToggleButton 
+                            toggleButton = {this.props.pageDisplay}
+                            stateUpdater = {this.updateToggleButton}/>
+
+                    <form>
+                        {this.submitError !== "" && (<p className="errorMessageStyle">{this.state.submitError}</p>)}
+                        {inputFields} 
+                        <div className = "buttonContainer">
+                        {this.props.pageDisplay==="create" && (<button className = "saveButton" onClick={this.handleSaveUser}>SAVE</button>)}
+                        {this.props.pageDisplay==="signIn" && (<button className = "signInButton" onClick={this.handleSignIn}>SIGN IN</button>)}
+                        {this.props.pageDisplay==="create" && (<div className="separatorDiv"><p className="separator">or</p></div>)}
+                        {this.props.pageDisplay==="create" && (<button className = "facebookButton">
+                                <div ><FacebookLogo className="fbIcon"/></div>
+                                <div>SIGN IN WITH FACEBOOK</div>
+                            </button>)}
+                       
+                        <p className = "cancel">Cancel</p>
+
+                        <div className = "privacyDiv">
+                            <p className="privacyItem">Privacy Policy and Cookies</p>
+                            <p className="privacyItem">Terms of Sale and Use</p>
+                        </div>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
         )
     }
