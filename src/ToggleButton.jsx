@@ -1,4 +1,6 @@
 import React from "react";
+import "./loginFields.css"
+
 
 class ToggleButton extends React.Component{
     constructor(props){
@@ -15,8 +17,8 @@ class ToggleButton extends React.Component{
 
     render(){
         return(
-            <div>
-                <label htmlFor="signIn">
+            <div className = "toggleButtons">
+                <label htmlFor="signIn" className = "toggleButton">
                     <input 
                         type = "radio" 
                         id = "signIn" 
@@ -24,16 +26,17 @@ class ToggleButton extends React.Component{
                         checked = {this.props.toggleButton === "signIn" }
                         onChange = {this.updateSelection} 
                         />
-                    SIGN IN 
+                   <span>SIGN IN</span> 
                 </label>
-                <label htmlFor = "create">
+                <label htmlFor = "create"  className = "toggleButton">
                     <input 
                         type = "radio" 
                         id = "create" 
                         value = "create" 
                         checked = {this.props.toggleButton==="create" }
                         onChange = {this.updateSelection}/>
-                    CREATE ACCOUNT
+                    <span>CREATE ACCOUNT</span>
+                    
                 </label>
             </div>
         )
