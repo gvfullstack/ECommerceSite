@@ -2,38 +2,23 @@ import React from "react";
 import './cartPage.css';
 
 class ProductListItem extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            itemTotal: 0,
-            quantity: 0
-        }
-    }
+   
 
     calculateTotal = (e) =>{
         let total = e.target.value * this.props.cartItem.cartItemPrice.slice(1)
-        this.setState({itemTotal: total, quantity: e.target.value})
+        let shipping = e.target.value * this.props.cartItem.unitShippingCost
+        this.props.updateProductTotals(e.target.value, total, this.props.cartItem.key, shipping)
+        console.log(this.props.cartItem)
     }
 
-    resetValues = () =>{this.setState({itemTotal: 0, quantity: 0})}
-
-
-// [    {image: "https://media.istockphoto.com/id/1041992872/es/vector/dise%C3%B1o-abstracto-de-ciudad-de-nueva-york-con-estilo-t-shirts-y-prendas-de-vestir.jpg?s=2048x2048&w=is&k=20&c=ZMyRHOnGYhc4RIiiLiBPPifQsmV7zYFU1P1_fXIS0hc=", 
-//     cartItemGender :"Gender Neutral", 
-//     cartItemTitle : "NYC T-SHIRT" ,
-//     cartItemColor : "Black", 
-//     cartItemSize : "Large", 
-//     cartItemPrice : "$29.99", 
-//     maxItemQuantity : "10", 
-//     cartItemTotalPrice : ""}]
-
+    resetValues = () => this.props.resetCartValues()
 
     render(){
 
         let quantitiesArr = (num) =>{
             let qtyArr = []
             for(let i = 0; i <= num; i++){
-                qtyArr.push(<option value={i}>{i}</option>)
+                qtyArr.push(<option key = {i} value={i}>{i}</option>)
             } return qtyArr
         }
 
@@ -57,12 +42,12 @@ class ProductListItem extends React.Component{
                 </div>
 
                 <div className="cartItemQuantityContainer">
-                    <select name="selectQuantity" id="selectQuantity" onChange={this.calculateTotal} value = {this.state.quantity}>
+                    <select name="selectQuantity" id="selectQuantity" onChange={this.calculateTotal} value = {this.props.cartItem.cartItemQuantity}>
                         {quantitiesArr(this.props.cartItem.maxItemQuantity)}
                     </select>
                 </div>
                 <div className ="cartItemTotalPriceContainer">
-                    <p className="cartItemTotalPrice">${this.state.itemTotal}</p>
+                    <p className="cartItemTotalPrice">${this.props.cartItem.cartItemTotalPrice}</p>
                 </div>
         </div>
         )

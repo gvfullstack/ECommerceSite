@@ -252,3 +252,11 @@
     cursor: pointer;
 
 }
+
+.promoSectionContainer{
+    display: flex;
+    flex-direction: column;
+      
+    height: 6rem;
+
+}
