@@ -33,7 +33,7 @@ class App extends React.Component{
     render(){
         return (
             <div>
-                {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
+                {/* {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
                     <div>
                         <LoginPage 
                             users = {this.state.users} 
@@ -47,7 +47,9 @@ class App extends React.Component{
                 {(this.state.pageDisplay === "cart") &&  
                 <div>
                     <CartPage/>
-                </div>}
+                </div>} */}
+                <CartPage/>
+
             
             </div>
         )
