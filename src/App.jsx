@@ -1,6 +1,7 @@
 import React from "react";
 import LoginPage from "./LoginPage";
 import CartPage from "./CartPage";
+import ShippingPage from "./ShippingPage";
 
 
 class App extends React.Component{ 
@@ -28,12 +29,17 @@ class App extends React.Component{
                 if(user.email === email){
                     this.setState({loggedInUser: user})
                 }})})}
+    
+    openShippingPage = () =>{
+        this.setState({pageDisplay: "shipping"})
+        console.log(this.state.pageDisplay)
+    }
 
 
     render(){
         return (
             <div>
-                {/* {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
+                 {/* {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
                     <div>
                         <LoginPage 
                             users = {this.state.users} 
@@ -42,13 +48,19 @@ class App extends React.Component{
                             updatePageDisplayed = {this.updatePageDisplayed}
                             setLoggedInUser = {this.setLoggedInUser}/> 
                     </div>
-                }
-
+                } */}
+{/* 
                 {(this.state.pageDisplay === "cart") &&  
-                <div>
-                    <CartPage/>
-                </div>} */}
-                <CartPage/>
+                    <div>
+                        <CartPage openShippingPage={this.openShippingPage}/>
+                    </div>} 
+
+
+                {(this.state.pageDisplay === "shipping") &&  
+                    <div>
+                        <ShippingPage/>
+                    </div>} */}
+                    <ShippingPage/>
 
             
             </div>
@@ -58,14 +70,3 @@ class App extends React.Component{
 export default App
 
 
-
-// [
-//     {label: "Your E-Mail Address*", inputID: "email", value:""}, 
-//     {label: "Create Password*", inputID: "password", value:""},
-//     {label: "Confirm Password*", inputID: "passwordConfirm", value:""},
-//     {label: "First Name*", inputID: "fName", value:""},
-//     {label: "Surename*", inputID: "surename", value:""},
-//     {label: "Postal Code*", inputID: "postCode", value:""},
-//     {label: "Sign In E-Mail*", inputID: "signInEmail", value:""},
-//     {label: "Sign In Password*", inputID: "signInPassword", value:""}
-// ]

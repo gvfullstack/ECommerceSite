@@ -3,15 +3,17 @@ import './cartPage.css';
 
 class ProductListItem extends React.Component{
    
+  
 
     calculateTotal = (e) =>{
-        let total = e.target.value * this.props.cartItem.cartItemPrice.slice(1)
-        let shipping = e.target.value * this.props.cartItem.unitShippingCost
+        let total = (e.target.value * this.props.cartItem.cartItemPrice).toFixed(2)
+        let shipping = (e.target.value * this.props.cartItem.unitShippingCost).toFixed(2)
         this.props.updateProductTotals(e.target.value, total, this.props.cartItem.key, shipping)
-        console.log(this.props.cartItem)
     }
 
-    resetValues = () => this.props.resetCartValues()
+   
+
+    resetValues = () => this.props.resetCartValues(this.props.cartItem.key)
 
     render(){
 
@@ -38,7 +40,7 @@ class ProductListItem extends React.Component{
                     <p className="cartItemSize"> Size: <b>{this.props.cartItem.cartItemSize}</b></p>
                 </div>
                 <div className="cartItemPriceContainer">
-                    <div className="cartItemPrice">{this.props.cartItem.cartItemPrice}</div>
+                    <div className="cartItemPrice">${this.props.cartItem.cartItemPrice}</div>
                 </div>
 
                 <div className="cartItemQuantityContainer">
