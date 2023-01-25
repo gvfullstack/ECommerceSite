@@ -250,6 +250,14 @@
     border-style: none;
     border-radius: 3px;
     cursor: pointer;
+}
+
+.checkoutButtonDisabled{  height: 100%;
+    width: 100%;
+    color: white;
+    border-style: none;
+    border-radius: 3px;
+    background-color: rgb(167, 95, 95);
 
 }
 

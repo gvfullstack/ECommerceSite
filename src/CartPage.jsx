@@ -8,6 +8,9 @@ class CartPage extends React.Component{
     constructor(props){
         super(props)
         this.state = {
+            discountCode: "HAPPYCAMPER",
+            discountPercentage: 0.25,
+            discountCodeEnabled: false,
             cartItems : [
                 {key: "CP1",
                 image: "https://media.istockphoto.com/id/1041992872/es/vector/dise%C3%B1o-abstracto-de-ciudad-de-nueva-york-con-estilo-t-shirts-y-prendas-de-vestir.jpg?s=2048x2048&w=is&k=20&c=ZMyRHOnGYhc4RIiiLiBPPifQsmV7zYFU1P1_fXIS0hc=", 
@@ -15,7 +18,7 @@ class CartPage extends React.Component{
                 cartItemTitle : "NYC T-SHIRT" ,
                 cartItemColor : "Black", 
                 cartItemSize : "Large", 
-                cartItemPrice : "$29.99", 
+                cartItemPrice : "29.99", 
                 maxItemQuantity : "10", 
                 unitShippingCost : 3.99,
                 cartItemTotalPrice : 0,
@@ -28,7 +31,7 @@ class CartPage extends React.Component{
                 cartItemTitle : "CA OCEAN T-SHIRT", 
                 cartItemColor : "Black", 
                 cartItemSize : "Large", 
-                cartItemPrice : "$39.99", 
+                cartItemPrice : "39.99", 
                 maxItemQuantity : "10",
                 unitShippingCost : 3.99, 
                 cartItemTotalPrice : 0,
@@ -41,7 +44,7 @@ class CartPage extends React.Component{
                 cartItemTitle : "HAWAII T-SHIRT", 
                 cartItemColor : "Black", 
                 cartItemSize : "Large", 
-                cartItemPrice : "$29.99", 
+                cartItemPrice : "29.99", 
                 maxItemQuantity : "10",
                 unitShippingCost : 3.99, 
                 cartItemTotalPrice : 0,
@@ -49,44 +52,77 @@ class CartPage extends React.Component{
                 totalShippingCost: 0}
             ],
 
-            cartFields : [{key: "CP4", fieldLabel:"Cart Subtotal", fieldTotal : 0, className: "subtotalContainer"}, 
-                        {key: "CP5", fieldLabel:"Shipping & Handling", fieldTotal : 0, className: "shippingContainer"}, 
-                        {key: "CP6",fieldLabel:"Discount", fieldTotal : 0, className: "discountContainer"}, 
-                        {key: "CP7",fieldLabel:"Cart Total", fieldTotal : 0, className : "totalContainer", classNamePrice : "cartTotal"}] 
+            cartFields : [{key: "CP4", fieldLabel:"Cart Subtotal", fieldTotal : "0.00", className: "subtotalContainer"}, 
+                        {key: "CP5", fieldLabel:"Shipping & Handling", fieldTotal : "0.00", className: "shippingContainer"}, 
+                        {key: "CP6",fieldLabel:"Discount", fieldTotal : "0.00", className: "discountContainer"}, 
+                        {key: "CP7",fieldLabel:"Cart Total", fieldTotal : "0.00", className : "totalContainer", classNamePrice : "cartTotal"}],
+            
+            checkOutButtonDisabled: true,
+            userPromoCode: ""
         }
     }
 
     updateProductTotals = (quantity, total, key, shipping) =>{
-        this.setState({cartItems: this.state.cartItems.map((cartItem) => {
+        this.setState({ 
+            cartItems: this.state.cartItems.map((cartItem) => {
             if(key === cartItem.key){
                 return {...cartItem, cartItemTotalPrice: total, cartItemQuantity: quantity, totalShippingCost: shipping}
             }
             else{return cartItem}
-        }),
+        })}, 
+            () => {this.updateTotals()}
+        )
+    }
 
-        cartFields: this.state.cartFields.map((cartField) => {
-            if(cartField.key === "CP4"){
-                return {...cartField, fieldTotal: this.state.cartItems.reduce((acc, cartItem) => {return acc + cartItem.cartItemTotalPrice}, 0)}
-            }
-            else if(cartField.key === "CP5"){
-                return {...cartField, fieldTotal: this.state.cartItems.reduce((acc, cartItem) => {return acc + cartItem.totalShippingCost}, 0)}
-            }
-            else if(cartField.key === "CP7"){
-                let sumOfFields = this.state.cartFields.reduce((acc, cartField) => {
-                    if(cartField.key !== "CP7"){
-                        return acc + cartField.fieldTotal}
-                    else{return acc}}, 0)
+    updateTotals = () =>{
+        const CP4Map = this.state.cartItems.reduce((acc, cartItem) => {return parseFloat(acc) + parseFloat(cartItem.cartItemTotalPrice)}, 0)
+        const CP5Map = this.state.cartItems.reduce((acc, cartItem) => {return parseFloat(acc) + parseFloat(cartItem.totalShippingCost)}, 0)
+        const CP6Map = CP4Map * (this.state.discountCodeEnabled ? this.state.discountPercentage : 0)
+        const CP7 = (CP4Map + CP5Map - CP6Map).toFixed(2)
 
-                return {...cartField, fieldTotal: sumOfFields }
+        const cartFieldValues = [{CP4:CP4Map.toFixed(2)}, {CP5:CP5Map.toFixed(2)}, {CP6:CP6Map.toFixed(2)}, {CP7:CP7}]
+
+        const checkOutButtonStatus = CP4Map > 0 ? false : true
+           
+        this.setState({...this.state, checkOutButtonDisabled: checkOutButtonStatus, 
+            cartFields: this.state.cartFields.map((cartField) => {
+                for(let i = 0; i < cartFieldValues.length; i++){
+                    if(cartField.key === Object.keys(cartFieldValues[i])[0]){
+                        return {...cartField, fieldTotal: Object.values(cartFieldValues[i])[0]}
+                    }
                 }
-            else{return cartField}
+            })
+        })
         }
-        )})}
 
-    resetCartValues = () => {
+    resetCartValues = (key) => {
         this.setState({cartItems: this.state.cartItems.map((cartItem) => {
-            return {...cartItem, cartItemTotalPrice: 0, cartItemQuantity: 0}
-        })})}
+            if(key === cartItem.key){
+            return {...cartItem, cartItemTotalPrice: 0, cartItemQuantity: 0, totalShippingCost: 0}}
+            else{return cartItem}
+        })}, () => this.updateTotals())}
+
+    setPromoStatus = () =>{   
+        console.log("ran PROMOSTATUS") 
+        this.setState({discountCodeEnabled: this.state.userPromoCode === this.state.discountCode}, () => this.applyDiscount())
+    }
+    
+    applyDiscount = () => {
+
+        const cartSubTotal = this.state.cartFields.filter((cartField) => cartField.key === "CP4")[0].fieldTotal
+        const discountMultiplier = this.state.discountCodeEnabled ? this.state.discountPercentage : 0
+        
+        this.setState({cartFields: this.state.cartFields.map((item)=> {
+            if(item.key === "CP6"){
+                return {...item, fieldTotal: (cartSubTotal * discountMultiplier).toFixed(2)}
+            }
+            else{return item}})},
+            () => this.updateTotals())
+        }
+
+        updatePromoState = (e) => {
+            this.setState({userPromoCode: e.target.value})
+        }
 
 
     render(){
@@ -99,7 +135,9 @@ class CartPage extends React.Component{
                     key={cartItem.key} 
                     cartItem={cartItem} 
                     updateProductTotals={this.updateProductTotals}
-                    resetCartValues = {this.resetCartValues}/>})
+                    resetCartValues = {this.resetCartValues}
+                    setPromoStatus = {this.setPromoStatus}
+                    />})
 
         return (
             <div className = "cartPageContainer">
@@ -110,7 +148,15 @@ class CartPage extends React.Component{
                             {cartItems}                    
                 </div>
                 <div className = "cartPageContainerRight">
-                    <CartSummary cartFields = {this.state.cartFields}/>
+                    <CartSummary 
+                        cartFields = {this.state.cartFields} 
+                        setPromoStatus = {this.setPromoStatus} 
+                        discountCode = {this.state.discountCode}
+                        checkOutButtonDisabled = {this.state.checkOutButtonDisabled}
+                        userPromoCode = {this.state.userPromoCode}
+                        updatePromoState = {this.updatePromoState}
+                        openShippingPage = {this.props.openShippingPage}
+                        />
                 </div>
                 
             </div>
