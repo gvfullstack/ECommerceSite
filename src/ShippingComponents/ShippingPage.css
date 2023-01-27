@@ -1,0 +1,252 @@
+.shippingInformation{
+    box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
+    padding: 1rem 1rem;
+    border-radius: 5px;
+}
+
+.leftShippingPage{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 1rem;
+    width: 60rem;
+    height: 48rem;
+    box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
+}
+
+.dropdownContainer{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -2rem;
+    height: 2rem;
+    margin-right: 9.25rem;
+}
+
+.labelStyleDD{
+    font-size: 1rem;
+    font-weight: 700;
+    width: 8rem;
+    height: 2rem;
+    margin-left: .5rem;
+}
+
+
+.country,
+.state,
+.city{
+    border-style: none;
+    height: 2rem;
+    border-radius: 5px;
+    background-color: rgb(240, 242, 242);
+}
+
+.country{
+    width: 10rem;
+}
+
+.state{
+    width: 15rem;
+}
+
+.city{
+    width: 20rem;
+}
+
+.shippingInfoDropdown{
+    display: flex;
+    border-style: none;
+    border-radius: 5px;
+    height: 2rem;
+    width: 10rem;
+}
+
+.labelStyle{
+        font-size: 1rem;
+        font-weight: 700;
+        width: 8rem;
+        justify-self: center;
+        height: 2rem;
+        align-self: center;
+    }
+
+.inputLabel{
+    display: flex;
+    flex-direction: row;
+    line-height: 2rem;
+    margin-top: .5rem;
+
+}
+
+.inputBox{
+    border-style: none;
+    }
+
+.errorMessageStyle{
+        color: red; 
+        font-size: 12px;
+        margin-top: .25rem; 
+        margin-bottom: 0rem; 
+        margin-left: 8.5rem;
+    }
+
+.SH1, 
+.SH2,
+.SH3,
+.SH4{
+    border-style: solid;
+    border-color: rgb(191, 207, 207);
+    border-width: 1px;
+    display: flex;
+    height: 2rem;
+    margin-left: .5rem;
+}
+
+.SH1, 
+.SH2{
+    width: 20rem;
+    border-radius: 5px;
+}
+
+.SH3{
+    width: 40rem;
+    border-radius: 5px;
+}
+
+.SH4{
+    width: 7rem;
+    border-radius: 5px;
+}
+
+.aTitle,
+.surname,
+.address,
+.postCode
+{
+    border-style: none;
+    border-style: none;
+    height: 90%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.phoneCountryCode,
+.phoneAreaCode,
+.phone{
+    border-style: solid;
+    border-color: rgb(191, 207, 207);
+    border-width: 1px;
+}
+
+.phoneCountryCode{
+    width: 1.5rem;
+    border-right: solid;
+    border-right-width: 1px;
+    border-right-color: rgb(240, 245, 245);
+    text-align: center;
+    
+}
+
+.phoneAreaCode{
+    width: 3rem;
+    margin-right: 1rem;
+    text-align: center;   
+    border-left-width: 0px;
+}
+
+.phone{
+    width: 8rem;
+}
+
+
+.labelStylePhone{
+    font-size: 1rem;
+    font-weight: 700;
+    width: 8rem;
+    justify-self: center;
+    height: 2rem;
+    align-self: center;
+    border: none;
+    border-color: white;
+}
+.inputLabelPhone{
+    border: none;
+    display: flex;
+    flex-direction: row;
+    line-height: 2rem;
+    margin-top: .5rem;
+}
+
+.SH9, 
+.SH10{
+    border-width: 1px;
+    display: flex;
+    height: 2rem;
+    margin-left: .5rem;
+}
+
+.Hr{
+    border-color: rgba(240, 238, 238, 0.5);
+    border-style: solid;
+    margin-top: 1rem;
+}
+
+.shippingRadioSection{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    height: 6rem;
+}
+
+.radioBox{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.shippingText{
+    display: flex;
+    flex-direction: row;
+    width: 30rem;
+}
+
+.shippingTextBold{
+    width: 7rem;
+}
+
+.backButton{
+    height: 2.5rem;
+    width: 8rem;
+    border-radius: 3px;
+    border-color: rgb(122, 119, 119);
+    border-style: solid;
+    border-width: 3px;
+    background-color: white;
+    font-weight: 700;
+
+}
+
+.shippingLinkContainer{
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+
+.shipDetailLink{
+    color: red;
+    font-weight: 400;
+    text-align: right;
+    margin-right: 15rem;
+    margin-top: -2.75rem;
+    margin-bottom: 2rem;
+    width: 50rem;
+}

@@ -1,7 +1,7 @@
 import React from "react";
-import LoginPage from "./LoginPage";
-import CartPage from "./CartPage";
-import ShippingPage from "./ShippingPage";
+import LoginPage from "./LoginComponents/LoginPage";
+import CartPage from "./CartComponents/CartPage";
+import ShippingPage from "./ShippingComponents/ShippingPage";
 
 
 class App extends React.Component{ 
@@ -27,8 +27,8 @@ class App extends React.Component{
         this.setState({...this.state, pageDisplay: "cart", loggedInUser: 
             this.state.users.map((user)=>{
                 if(user.email === email){
-                    this.setState({loggedInUser: user})
-                }})})}
+                     return user}})
+                })}
     
     openShippingPage = () =>{
         this.setState({pageDisplay: "shipping"})

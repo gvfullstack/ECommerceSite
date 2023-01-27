@@ -1,0 +1,90 @@
+
+
+.circleBox,
+.labelBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.circlesContainer,
+.labelsContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 70%;
+    height: 1rem;
+    margin-bottom: 1rem;
+}
+
+.circlesContainer{
+        border-bottom:rgb(223, 219, 219) solid;
+        border-width: .5rem;
+
+    }
+    
+.labelsContainer{
+    width: 70%;
+    height: 1rem;
+}
+
+
+.circlesComplete,
+.circlesIncomplete,
+.circleLabelsComplete,
+.circleLabelsIncomplete
+{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 36%;
+}
+
+.circlesComplete{  
+    border-bottom:rgb(77, 76, 76) solid;
+    border-width: .5rem;
+}
+
+.cartCircle,
+.deliveryCircle, 
+.paymentCircle,
+.confirmationCircle{
+    margin-bottom: -1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 50px;
+}
+
+.cartCircle,
+.deliveryCircle{
+    background-color:rgb(77, 76, 76);
+    margin-left: -.25rem;
+    margin-right: -.25rem;
+
+}
+
+.paymentCircle,
+.confirmationCircle{
+    background-color: rgb(223, 219, 219);
+}
+
+.cartLabel,
+.deliveryLabel,
+.paymentLabel,
+.confirmationLabel{
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 5rem;
+    color: rgb(126, 122, 122);
+}

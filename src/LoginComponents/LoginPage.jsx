@@ -1,10 +1,10 @@
 import React from "react";
-import LoginInputFields from "./LoginInputFields";
-import ToggleButton from "./ToggleButton";
+import LoginInputFields from "../LoginComponents/LoginInputFields";
+import ToggleButton from "../LoginComponents/ToggleButton";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
-import {ReactComponent as FacebookLogo} from './images/facebook-square.svg';
-import "./loginFields.css"
+import {ReactComponent as FacebookLogo} from '../images/facebook-square.svg';
+import "../LoginComponents/loginFields.css"
 
 const element = <FontAwesomeIcon icon={faEye} />
 

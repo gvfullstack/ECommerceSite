@@ -1,8 +1,7 @@
 import React from "react";
-import "./loginFields.css"
+import "../LoginComponents/loginFields.css"
 
-import './index.css';
-let myFunctions = require("./userCredentialValidations")
+let myFunctions = require("../LoginComponents/userCredentialValidations")
 
 
 class LoginInputFields extends React.Component{
@@ -33,7 +32,6 @@ class LoginInputFields extends React.Component{
                     break;
                 case "passwordError":
                     let validationResult = myFunctions.passwordCheck(value) 
-                    console.log("YOU ARE HERE", validationResult)
                     textMessage = validationResult.length > 0 ? validationResult.map(errorMessage=><li key = {errorMessage}>{errorMessage}</li>) : ''
                     break;
                 case "passwordConfirmError":
