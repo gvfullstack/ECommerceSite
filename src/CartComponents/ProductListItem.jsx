@@ -1,5 +1,5 @@
 import React from "react";
-import './cartPage.css';
+import '../CartComponents/cartPage.css';
 
 class ProductListItem extends React.Component{
    

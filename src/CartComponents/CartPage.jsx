@@ -1,7 +1,7 @@
 import React from "react";
-import './cartPage.css';
-import ProductListItem from "./ProductListItem";
-import CartSummary from "./CartSummary";
+import '../CartComponents/cartPage.css';
+import ProductListItem from "../CartComponents/ProductListItem";
+import CartSummary from "../CartComponents/CartSummary";
 
 
 class CartPage extends React.Component{ 

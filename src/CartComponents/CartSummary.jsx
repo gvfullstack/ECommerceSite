@@ -1,6 +1,6 @@
 import React from "react";
-import PromoCodeSection from "./PromoCode";
-import CartSummaryTotals from "./CartSummaryTotals";
+import PromoCodeSection from "../CartComponents/PromoCode";
+import CartSummaryTotals from "../CartComponents/CartSummaryTotals";
 
 class CartSummary extends React.Component{
     constructor(props){
