@@ -2,22 +2,38 @@ import React from "react";
 import PromoCodeSection from "../CartComponents/PromoCode";
 import CartSummaryTotals from "../CartComponents/CartSummaryTotals";
 
+
 class CartSummary extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            disabled: true}
-        }
+    // constructor(props){
+    //     super(props)
+    //     this.state = {
+    //         buttonClassName: "checkoutButtonDisabled"
+    //     }
+    // }
+    
+    // componentDidMount() {
+
+    //     this.setState({buttonClassName: JSON.parse(localStorage.getItem("checkOutButtonDisabled")) ? "checkoutButtonDisabled" : "checkoutButton"})
+    //     console.log(this.state.buttonClassName)
+    // }
 
     openShippingPage = () => {
-       this.props.openShippingPage()     }  
+        this.props.openShippingPage()    
+        this.props.handleSaveCart()
+    }  
+
+    
 
     render(){
+
         let buttonClassName = this.props.checkOutButtonDisabled ? "checkoutButtonDisabled" : "checkoutButton"
 
         let cartSummaryFields = this.props.cartFields.map((field)=>{
             return (
-            <CartSummaryTotals key = {field.key} cartField = {field} setPromoStatus = {this.props.setPromoStatus}/>)
+            <CartSummaryTotals 
+                key = {field.key} 
+                cartField = {field} 
+                setPromoStatus = {this.props.setPromoStatus}/>)
         })
 
         return( 

@@ -15,25 +15,25 @@ class LoginPage extends React.Component{
             inputRef : React.createRef(),
             toggleButton: "signIn", 
             inputFieldsData: [
-                {label: "Your E-Mail Address*", inputID: "email", visibility:"create", type: "email", masked:"text", value:"", error:"", showError:false}, 
-                {label: "Create Password*", inputID: "password", visibility:"create", type: "password", icon:element, masked:"password", value:"", error:"", showError:false},
-                {label: "Confirm Password*", inputID: "passwordConfirm", visibility:"create", type: "passwordConfirm", icon:element, masked:"password", value:"", error:"", showError:false},
-                {label: "First Name*", inputID: "fName", visibility:"create", type:"name",masked:"text", value:"", error:"", showError:false},
-                {label: "Surename*", inputID: "surename", visibility:"create", type:"name", masked:"text", value:"", error:"", showError:false},
-                {label: "Postal Code*", inputID: "postCode", visibility:"create", type: "zipCode", masked:"text", value:"", error:"", showError:false},
-                {label: "Sign In E-Mail*", inputID: "signInEmail", visibility:"signIn", type: "email", masked:"text", value:"", error:"", showError:false},
-                {label: "Sign In Password*", inputID: "signInPassword", visibility:"signIn", type: "passwordSignIn", icon:element, masked:"password", value:"", error:"", showError:false}
+                {key:"LP1",label: "Your E-Mail Address*", inputID: "email", visibility:"create", type: "email", masked:"text", value:"", error:"", showError:false}, 
+                {key:"LP2",label: "Create Password*", inputID: "password", visibility:"create", type: "password", icon:element, masked:"password", value:"", error:"", showError:false},
+                {key:"LP3",label: "Confirm Password*", inputID: "passwordConfirm", visibility:"create", type: "passwordConfirm", icon:element, masked:"password", value:"", error:"", showError:false},
+                {key:"LP4",label: "First Name*", inputID: "fName", visibility:"create", type:"name",masked:"text", value:"", error:"", showError:false},
+                {key:"LP5",label: "Surename*", inputID: "surename", visibility:"create", type:"name", masked:"text", value:"", error:"", showError:false},
+                {key:"LP6",label: "Postal Code*", inputID: "postCode", visibility:"create", type: "zipCode", masked:"text", value:"", error:"", showError:false},
+                {key:"LP7",label: "Sign In E-Mail*", inputID: "signInEmail", visibility:"signIn", type: "email", masked:"text", value:"", error:"", showError:false},
+                {key:"LP8",label: "Sign In Password*", inputID: "signInPassword", visibility:"signIn", type: "passwordSignIn", icon:element, masked:"password", value:"", error:"", showError:false}
             ],
             submitError: ""
         }
-        ;
+
         this.updateToggleButton = this.updateToggleButton.bind(this)
         this.updateInputFieldsValueState = this.updateInputFieldsValueState.bind(this)
-        this.getSpecificField = this.getSpecificField.bind(this)
-
+        this.getSpecificField = this.getSpecificField.bind(this);
 
     }
-    
+
+
     updateToggleButton(val){
         this.props.updatePageDisplayed(val)
     }
@@ -93,13 +93,12 @@ class LoginPage extends React.Component{
                     })
             })
 
+            localStorage.setItem("user", JSON.stringify(newUserObj));
             this.props.userAdd(newUserObj)
         }
     }
 
-    listUsers = () =>{
-        console.log(this.props.users)
-    }
+  
     handleSignIn = (e) =>{
         e.preventDefault()
         let email = this.getSpecificField("signInEmail")
@@ -135,35 +134,37 @@ class LoginPage extends React.Component{
         let inputFields = inputFieldsData.map((field, index) => 
         {
                 return <LoginInputFields 
-                label = {field.label} 
-                id={field.inputID} 
-                index={index} 
-                toggleButton =  {this.props.pageDisplay}
-                visibility = {field.visibility}
-                inputtype = {field.type}
-                onChange = {this.updateInputFieldsValueState}
-                password = {this.getSpecificField("password")}
-                icon = {field.icon}
-                masked = {field.masked}
-                value = {field.value}
-                ref = {this.inputRef}
-                error = {field.error}
-                showError = {field.showError}
-                updateError = {this.updateError}
-                />})
+                        label = {field.label} 
+                        id={field.inputID}
+                        uniqueId = {field.key} 
+                        index={index} 
+                        toggleButton =  {this.props.pageDisplay}
+                        visibility = {field.visibility}
+                        inputtype = {field.type}
+                        onChange = {this.updateInputFieldsValueState}
+                        password = {this.getSpecificField("password")}
+                        icon = {field.icon}
+                        masked = {field.masked}
+                        value = {field.value}
+                        ref = {this.inputRef}
+                        error = {field.error}
+                        showError = {field.showError}
+                        updateError = {this.updateError}
+                    />})                                                    
 
 
         return(
             <div >
                 <div className = "loginPage">
-                    <button onClick={this.listUsers}>display Users</button>
 
                     <ToggleButton 
                             toggleButton = {this.props.pageDisplay}
                             stateUpdater = {this.updateToggleButton}/>
 
                     <form>
-                        {this.submitError !== "" && (<p className="errorMessageStyle">{this.state.submitError}</p>)}
+                        {this.submitError !== "" &&
+                        this.props.pageDisplay==="signIn"
+                        && (<p className="errorMessageStyle">{this.state.submitError}</p>)}
                         {inputFields} 
                         <div className = "buttonContainer">
                         {this.props.pageDisplay==="create" && (<button className = "saveButton" onClick={this.handleSaveUser}>SAVE</button>)}

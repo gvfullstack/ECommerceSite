@@ -1,16 +1,15 @@
 import React from "react";
-import "./loginFields.css"
+import "../LoginComponents/loginFields.css"
 
 
 class ToggleButton extends React.Component{
     constructor(props){
         super(props);
 
-        this.updateSelection = this.updateSelection.bind(this)  // why do we need to bind the function here but not in LoginInputFields.jsx 
+        this.updateSelection = this.updateSelection.bind(this)  
     }
 
     updateSelection(e){
-        // e.preventDefault() why is prevent default not needed here. 
         this.props.stateUpdater(e.target.value)
     }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import "../LoginComponents/loginFields.css"
 
+
 let myFunctions = require("../LoginComponents/userCredentialValidations")
 
 
@@ -74,16 +75,16 @@ class LoginInputFields extends React.Component{
             {visibility === toggleButton &&
            ( <div className = "divStyle" >
                
-                <label className = "inputLabel" htmlFor={this.props.id}>
+                <label className = "inputLabelLI" htmlFor={this.props.id}>
                     {this.props.label}
-                    <div className="inputContainer">
+                    <div className="inputContainerLI">
                         <input 
                         onChange= {this.updateInputState} className="inputBox" 
                         type = {this.state.passwordIconView ? this.state.passwordIconView: this.props.masked}
                         id = {this.props.id} 
                         data-type ={errorID}
                         value = {this.props.value}
-                        key = {this.props.key}
+                        key = {this.props.uniqueId}
                         onBlur = {this.runValidations}
                         ref = {this.props.ref}
                         />
@@ -93,7 +94,7 @@ class LoginInputFields extends React.Component{
 
                 </label>
                 
-                    {showError && (<p className= "errorMessageStyle">{this.props.error}</p>)}
+                    {showError && (<p className= "errorMessageStyleLI">{this.props.error}</p>)}
                
             </div>)}
 
