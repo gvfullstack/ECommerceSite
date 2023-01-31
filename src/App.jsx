@@ -9,11 +9,12 @@ class App extends React.Component{
         super(props)
         this.state = {
             users: [], 
-            pageDisplay: "signIn",
+            pageDisplay: "cart",
             loggedInUser: []
         }
     }
 
+  
     handleNewUserAdd = (newUser) => {
         this.setState({users: [...this.state.users, newUser]})
         console.log(this.state.users)
@@ -23,45 +24,46 @@ class App extends React.Component{
         this.setState({pageDisplay: val})
     }
 
-    setLoggedInUser = (email) =>{
-        this.setState({...this.state, pageDisplay: "cart", loggedInUser: 
-            this.state.users.map((user)=>{
-                if(user.email === email){
-                     return user}})
-                })}
-    
+
     openShippingPage = () =>{
         this.setState({pageDisplay: "shipping"})
         console.log(this.state.pageDisplay)
     }
 
+    backToCart = () =>{
+        this.setState({pageDisplay: "cart"})
+        console.log(this.state.pageDisplay)
+    }
 
     render(){
         return (
             <div>
-                 {/* {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
-                    <div>
-                        <LoginPage 
-                            users = {this.state.users} 
-                            userAdd = {this.handleNewUserAdd} 
-                            pageDisplay = {this.state.pageDisplay} 
-                            updatePageDisplayed = {this.updatePageDisplayed}
-                            setLoggedInUser = {this.setLoggedInUser}/> 
-                    </div>
-                } */}
-{/* 
-                {(this.state.pageDisplay === "cart") &&  
-                    <div>
-                        <CartPage openShippingPage={this.openShippingPage}/>
-                    </div>} 
+                {(this.state.pageDisplay === "signIn" || this.state.pageDisplay === "create") && 
+                <div>
+                    <LoginPage 
+                        users = {this.state.users} 
+                        userAdd = {this.handleNewUserAdd} 
+                        pageDisplay = {this.state.pageDisplay} 
+                        updatePageDisplayed = {this.updatePageDisplayed}
+                        setLoggedInUser = {this.setLoggedInUser}/> 
+                </div>
+            } 
+
+            {(this.state.pageDisplay === "cart") &&  
+                <div>
+                    <CartPage 
+                        openShippingPage={this.openShippingPage}/>
+                </div>} 
 
 
-                {(this.state.pageDisplay === "shipping") &&  
-                    <div>
-                        <ShippingPage/>
-                    </div>} */}
-                    <ShippingPage/>
+            {(this.state.pageDisplay === "shipping") &&  
+                <div>
+                    <ShippingPage 
+                        loggedInUser = {this.state.loggedInUser}
+                        backToCart = {this.backToCart}/>
+                </div>}
 
+                   
             
             </div>
         )

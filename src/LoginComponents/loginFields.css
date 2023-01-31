@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 .divStyle{
         display: flex; 
@@ -12,7 +13,7 @@
 
     }
 
-.inputLabel{
+.inputLabelLI{
         line-height: "2rem";
         margin-top: .5rem;
     }
@@ -21,15 +22,15 @@
     border-style: none;
     }
 
-.errorMessageStyle{
-        color: rgb(17, 0, 255); 
+.errorMessageStyleLI{
+        color: red; 
         font-size: 12px;
         margin-top: .25rem; 
         margin-bottom: 0rem; 
 
     }
 
-.inputContainer{
+.inputContainerLI{
     border-style: solid;
     border-color: rgb(191, 207, 207);
     border-width: 1px;

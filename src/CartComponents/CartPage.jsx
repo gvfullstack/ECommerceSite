@@ -55,7 +55,8 @@ class CartPage extends React.Component{
             cartFields : [{key: "CP4", fieldLabel:"Cart Subtotal", fieldTotal : "0.00", className: "subtotalContainer"}, 
                         {key: "CP5", fieldLabel:"Shipping & Handling", fieldTotal : "0.00", className: "shippingContainer"}, 
                         {key: "CP6",fieldLabel:"Discount", fieldTotal : "0.00", className: "discountContainer"}, 
-                        {key: "CP7",fieldLabel:"Cart Total", fieldTotal : "0.00", className : "totalContainer", classNamePrice : "cartTotal"}],
+                        {key: "CP7",fieldLabel:"Cart Total", fieldTotal : "0.00", className : "totalContainer", classNamePrice : "cartTotal"}
+                    ],
             
             checkOutButtonDisabled: true,
             userPromoCode: ""
@@ -63,6 +64,10 @@ class CartPage extends React.Component{
     }
 
     updateProductTotals = (quantity, total, key, shipping) =>{
+        this.resetLocalStorage("cartItems")
+        this.resetLocalStorage("cartFields")
+        this.resetLocalStorage("checkOutButtonDisabled")
+
         this.setState({ 
             cartItems: this.state.cartItems.map((cartItem) => {
             if(key === cartItem.key){
@@ -91,11 +96,15 @@ class CartPage extends React.Component{
                         return {...cartField, fieldTotal: Object.values(cartFieldValues[i])[0]}
                     }
                 }
-            })
+                return cartField
+            }
+            )
         })
         }
 
     resetCartValues = (key) => {
+      
+
         this.setState({cartItems: this.state.cartItems.map((cartItem) => {
             if(key === cartItem.key){
             return {...cartItem, cartItemTotalPrice: 0, cartItemQuantity: 0, totalShippingCost: 0}}
@@ -103,7 +112,6 @@ class CartPage extends React.Component{
         })}, () => this.updateTotals())}
 
     setPromoStatus = () =>{   
-        console.log("ran PROMOSTATUS") 
         this.setState({discountCodeEnabled: this.state.userPromoCode === this.state.discountCode}, () => this.applyDiscount())
     }
     
@@ -120,13 +128,50 @@ class CartPage extends React.Component{
             () => this.updateTotals())
         }
 
-        updatePromoState = (e) => {
-            this.setState({userPromoCode: e.target.value})
+    updatePromoState = (e) => {
+        this.setState({userPromoCode: e.target.value})
+    }
+
+    handleSaveCart = () => {
+
+        function saveToLocalStorage(key, value){
+            localStorage.setItem(key, JSON.stringify(value))
         }
+
+        let cartItems = this.state.cartItems
+        let cartFields = this.state.cartFields
+        let checkOutButtonDisabled = this.state.checkOutButtonDisabled
+
+        saveToLocalStorage("cartItems", cartItems)
+        saveToLocalStorage("cartFields", cartFields) 
+        saveToLocalStorage("checkOutButtonDisabled", checkOutButtonDisabled)  
+        
+        console.log(JSON.parse(localStorage.getItem("cartFields")))
+        console.log(JSON.parse(localStorage.getItem("cartItems")))
+        console.log("checkOutButtonDisabled", JSON.parse(localStorage.getItem("checkOutButtonDisabled")))
+   
+    }
+
+    resetLocalStorage(key) {
+        localStorage.removeItem(key);
+        }
+
+    componentDidMount() {
+        let cartItemData = JSON.parse(localStorage.getItem("cartItems")) ? 
+            JSON.parse(localStorage.getItem("cartItems")) : this.state.cartItems      
+
+        let cartFieldsData = JSON.parse(localStorage.getItem("cartFields")) ? 
+            JSON.parse(localStorage.getItem("cartFields")) : this.state.cartFields  
+
+        let checkOutButtonDisabledData = JSON.parse(localStorage.getItem("checkOutButtonDisabled")) ? 
+            true : false    
+
+        this.setState({...this.state, checkOutButtonDisabled: checkOutButtonDisabledData, cartItems: cartItemData, cartFields: cartFieldsData})
+      
+        }   
 
 
     render(){
-
         let random = ()=>Math.random()
         let headings = ["", "PRODUCT", "", "PRICE", "QUANTITY", "TOTAL"]
         let heading = headings.map((heading) => {return <p key={heading+random()}>{heading}</p>})
@@ -138,25 +183,28 @@ class CartPage extends React.Component{
                     resetCartValues = {this.resetCartValues}
                     setPromoStatus = {this.setPromoStatus}
                     />})
+            
 
         return (
             <div className = "cartPageContainer">
+               
                 <div className = "cartPageContainerLeft">
                         <div className = "cartPageContainerHeadings">
                             {heading}
                         </div>
-                            {cartItems}                    
+                            {cartItems}   
                 </div>
                 <div className = "cartPageContainerRight">
-                    <CartSummary 
-                        cartFields = {this.state.cartFields} 
-                        setPromoStatus = {this.setPromoStatus} 
-                        discountCode = {this.state.discountCode}
-                        checkOutButtonDisabled = {this.state.checkOutButtonDisabled}
-                        userPromoCode = {this.state.userPromoCode}
-                        updatePromoState = {this.updatePromoState}
-                        openShippingPage = {this.props.openShippingPage}
-                        />
+                <CartSummary 
+                    cartFields = {this.state.cartFields} 
+                    setPromoStatus = {this.setPromoStatus} 
+                    discountCode = {this.state.discountCode}
+                    checkOutButtonDisabled = {this.state.checkOutButtonDisabled}
+                    userPromoCode = {this.state.userPromoCode}
+                    updatePromoState = {this.updatePromoState}
+                    openShippingPage = {this.props.openShippingPage}
+                    handleSaveCart = {this.handleSaveCart}
+                    />
                 </div>
                 
             </div>

@@ -1,6 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import ShippingStatusGraphic from "../ShippingComponents/ShippingStatusGraphic";
 import ShippingInputFields from "../ShippingComponents/ShippingInputFields";
 import ShippingInfoDropdown from "../ShippingComponents/ShippingInfoDropdown";
@@ -99,6 +97,9 @@ class ShippingPage extends React.Component{
         )
     }
 
+ backToCart = () =>{
+    this.props.backToCart()
+}
 
     render(){
         let inputFields = this.state.inputFieldsData.map((field) => 
@@ -190,7 +191,7 @@ class ShippingPage extends React.Component{
                     </div>
                     
                     <div className="backButtonContainer">
-                        <button className="backButton">BACK TO CART</button>
+                        <button className="backButton" onClick= {this.backToCart}>BACK TO CART</button>
                     </div>
 
 
