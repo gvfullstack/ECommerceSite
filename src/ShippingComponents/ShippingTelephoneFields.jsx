@@ -1,7 +1,6 @@
 import React from "react";
 import "./ShippingPage.css"
 
-let myFunctions = require("./shippingFieldsValidations.js")
 
 class ShippingTelephoneFields extends React.Component{
 
@@ -15,13 +14,10 @@ class ShippingTelephoneFields extends React.Component{
 
     handleValidations = (e)=>{
         
-        let countryCode = this.props.countryCode
-        let areaCode = this.props.areaCode
-        let phoneNumber = this.props.value
         let index = this.props.index
-        const phoneProperties = [{value: this.props.countryCode, regEx: /\d{1}?$/, error: "Country code must be 1 digits"}, 
-                                {value: this.props.areaCode, regEx: /\d{3}?$/, error: "Area code must be 3 digits"},
-                                {value: this.props.value, regEx: /\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
+        const phoneProperties = [{value: this.props.countryCode, regEx: /^\d{1}$/, error: "Country code must be 1 digits"}, 
+                                {value: this.props.areaCode, regEx: /^\d{3}?$/, error: "Area code must be 3 digits"},
+                                {value: this.props.value, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
                                 ]
 
         let validationResults = phoneProperties.map((property)=>property.value.match(property.regEx) ? "" : property.error)

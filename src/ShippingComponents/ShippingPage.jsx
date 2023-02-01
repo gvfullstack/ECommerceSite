@@ -5,6 +5,8 @@ import ShippingInfoDropdown from "../ShippingComponents/ShippingInfoDropdown";
 import "../ShippingComponents/ShippingPage.css"
 import ShippingRadios from "../ShippingComponents/ShippingRadios";
 import ShippingTelephoneFields from "../ShippingComponents/ShippingTelephoneFields";
+import ShippingCartSummary from "./ShippingCartSummary";
+import ShippingSummaryTotals from "./ShippingSummaryTotals";
 
 class ShippingPage extends React.Component{
     constructor(props){ 
@@ -102,6 +104,38 @@ class ShippingPage extends React.Component{
 }
 
     render(){
+        let cartSummaryTotals = JSON.parse(localStorage.getItem("cartFields")).map((item)=>  
+        
+            <ShippingSummaryTotals 
+                fieldLabel = {item.fieldLabel}
+                fieldTotal = {item.fieldTotal}
+                index = {item.key}
+            />
+                // <div className="subtotalShippingSummary">
+                //     <p>{item.fieldLabel}:</p>
+                //     <strong className = {"shipping"+ item.key}>${item.fieldTotal}</strong>
+                // </div>
+            
+            )
+
+
+
+        let cartSummaryItems = JSON.parse(localStorage.getItem("cartItems")).filter((item)=>
+            {return item.cartItemQuantity > 0}).map((item)=>{
+                return (
+
+                    <ShippingCartSummary 
+                        image = {item.image}
+                        title = {item.cartItemTitle}
+                        color = {item.cartItemColor}
+                        size = {item.cartItemSize}
+                        quantity = {item.cartItemQuantity}
+                        price = {item.cartItemTotalPrice}  
+                    />
+                )
+            })
+      
+
         let inputFields = this.state.inputFieldsData.map((field) => 
              {return <ShippingInputFields 
                     key = {field.key} 
@@ -164,38 +198,60 @@ class ShippingPage extends React.Component{
         })
         
         return (
-            <div className = "leftShippingPage">
-                <ShippingStatusGraphic />
-                <div className="shippingInformation">
-                    <h3>SHIPPING INFORMATION <hr className="Hr"/></h3>
-                   
-                        {inputFields}
+            <div className="shippingPageContainer">
 
-                        <div className="dropdownContainer">
-                            {dropDownFields}
-                        </div>
+                <div className = "leftShippingPage">
+                    <ShippingStatusGraphic />
+                    <div className="shippingInformation">
+                        <h3>SHIPPING INFORMATION <hr className="Hr"/></h3>
+                            <div className="inputShippingContainer">
+                                {inputFields}
+                            </div>
 
-                        <div className="phoneContainer">
-                            {phoneFields}
-                        </div>
+                            <div className="dropdownContainer">
+                                {dropDownFields}
+                            </div>
 
-                <div>
-                    <hr className="Hr"/>
-                    <h3>SHIPPING METHOD </h3>
-                        <div className="shippingRadioSection">
-                            {shippingRadios}
-                        </div>
-                </div>
-                    <div className="shippingLinkContainer">
-                        <a className = "shipDetailLink" href="">View Shipping Details</a>
+                            <div className="phoneContainer">
+                                {phoneFields}
+                            </div>
+
+                            <div>
+                                <hr className="Hr"/>
+                                <h3>SHIPPING METHOD </h3>
+                                    <div className="shippingRadioSection">
+                                        {shippingRadios}
+                                    </div>
+                            </div>
+
+                            <div className="shippingLinkContainer">
+                                <a className = "shipDetailLink" href="">View Shipping Details</a>
+                            </div>
+                                
+                            <div className="backButtonContainer">
+                                <button className="backButton" onClick= {this.backToCart}>BACK TO CART</button>
+                            </div>
+                            
                     </div>
-                    
-                    <div className="backButtonContainer">
-                        <button className="backButton" onClick= {this.backToCart}>BACK TO CART</button>
-                    </div>
-
-
                 </div> 
+
+                <div className="rightShippingPage">
+                    <h3>SUMMARY <hr className="Hr"/></h3>
+                    <div className="itemsInBagContainer">
+                        <strong>{JSON.parse(localStorage.getItem('cartCount'))} items</strong> in your bag.  
+                        <hr className="Hr"/>  
+                    </div>
+                    <div className="shippingSummaryCartItemDiv">
+                        {cartSummaryItems}
+                        <hr className="Hr"/>  
+                    </div>
+                    <div className="shippingSummarySubTotalDiv">
+                        {cartSummaryTotals}
+                    </div>
+                    <div className="summaryShippingCheckOutButtonDiv">
+                        <button className="summaryShippingCheckOutButton">CHECK OUT</button>
+                    </div>
+                </div>
             </div>
         )
     }

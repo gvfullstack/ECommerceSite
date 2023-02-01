@@ -16,8 +16,14 @@
     border-radius: 5px;
     padding: 1rem;
     width: 60rem;
-    height: 48rem;
+    height: 58rem;
     box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
+
+}
+
+.inputShippingContainer{
+    display: flex;
+    flex-direction: column;
 }
 
 .dropdownContainer{
@@ -253,4 +259,105 @@
     margin-top: -2.75rem;
     margin-bottom: 2rem;
     width: 50rem;
+}
+
+/* RIGHT PANEL */
+.shippingPageContainer{
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    overflow: auto;
+}
+
+.rightShippingPage{
+    display: flex;
+    text-align: right;
+    flex-direction: column;
+    margin-top: 2rem;
+    padding: 1rem;
+    width: 25rem;
+    height: 58rem;
+    box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
+}
+
+.cartSummaryItemDiv{
+    display: flex;
+    margin-top: .25rem;   
+    height: 7rem; 
+}
+
+.cartSummaryImgDiv{
+    width: 13rem;
+    height: 15rem;
+    margin-right: 1rem;
+}
+
+.cartSummaryImgDiv img{
+    width: 100%;
+ }
+
+.summaryDetailsSectionDiv{
+    display: flex;
+    flex-direction: column;
+    width: 15rem;
+    height: 10rem;
+    margin-right: 1rem;
+    justify-content: flex-start;
+}
+
+.summaryDetailsSectionDiv p{
+    height: 1.5rem;
+    justify-content: left;
+    text-align: left;
+    margin: 1px 0 0 0 ;
+} 
+
+#summaryPrice{
+    text-align: right;
+    font-weight: 700;
+    margin-top: -1rem;
+}
+
+.cartSummaryItemTitleDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: .25rem;
+}
+
+.subtotalShippingSummary{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+    height: 2rem;
+    align-items: center;
+}
+
+.shippingCP6{
+    color: rgb(79, 219, 79)
+}
+
+
+.shippingCP7{
+    font-weight: 700;
+    color: red;
+    font-size: 1.25rem;
+}
+
+
+.summaryShippingCheckOutButton{
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 100%;
+    height: 2.5rem;
+    justify-self: center;
+    align-self: center;
 }

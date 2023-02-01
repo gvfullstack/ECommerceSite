@@ -2,10 +2,7 @@ import React from "react";
 
 
 class ShippingInfoDropdown extends React.Component{
-    constructor(props){
-        super(props);
-        
-    }
+  
     updateValue = (event) =>{
         this.props.onChange(event.target.value, this.props.index)
     }
