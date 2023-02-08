@@ -160,8 +160,8 @@ class CartPage extends React.Component{
         let cartFieldsData = JSON.parse(localStorage.getItem("cartFields")) ? 
             JSON.parse(localStorage.getItem("cartFields")) : this.state.cartFields  
 
-        let checkOutButtonDisabledData = JSON.parse(localStorage.getItem("checkOutButtonDisabled")) ? 
-            true : false  
+        let checkOutButtonDisabledData = JSON.parse(localStorage.getItem("checkOutButtonDisabled")) === false ? 
+            false : this.state.checkOutButtonDisabled  
         
         let cartCountData = JSON.parse(localStorage.getItem("cartCount")) ? 
             JSON.parse(localStorage.getItem("cartCount")) : 0
@@ -181,6 +181,7 @@ class CartPage extends React.Component{
         let cartItems = this.state.cartItems.map((cartItem) => {
             return <ProductListItem 
                     key={cartItem.key} 
+                    index = {cartItem.key}
                     cartItem={cartItem} 
                     updateProductTotals={this.updateProductTotals}
                     resetCartValues = {this.resetCartValues}
@@ -209,7 +210,6 @@ class CartPage extends React.Component{
                     handleSaveCart = {this.handleSaveCart}
                     />
                 </div>
-                
             </div>
         )
 }

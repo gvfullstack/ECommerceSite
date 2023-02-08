@@ -25,7 +25,7 @@ class ProductListItem extends React.Component{
         }
 
         return(
-            <div className = "mainCartContainer">
+            <div className = "mainCartContainer" key = {this.props.index}>
                 <div className = "xIconContainer">
                     <div className ="xIcon" onClick={this.resetValues}>X</div>
                 </div>

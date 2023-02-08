@@ -20,7 +20,7 @@ class ShippingStatusGraphic extends React.Component{
 
 
         return (
-            <div>
+            <div key = "12356as">
                 <div className="statusGraphic">
                     <div className="circleBox">
                         <div className="circlesContainer">

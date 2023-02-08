@@ -26,13 +26,6 @@
     flex-direction: column;
 }
 
-.dropdownContainer{
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -2rem;
-    height: 2rem;
-    margin-right: 9.25rem;
-}
 
 .labelStyleDD{
     font-size: 1rem;
@@ -66,12 +59,38 @@
     width: 20rem;
 }
 
+.dropdownContainer{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -2rem;
+    height: 4rem;
+    margin-right: 9.25rem;
+    width: 100%;
+}
+
+.shippingInfoDropdownContainer{
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    align-items: left;
+    width: 11rem
+}
+
 .shippingInfoDropdown{
     display: flex;
     border-style: none;
     border-radius: 5px;
     height: 2rem;
     width: 10rem;
+}
+
+
+.dropDownErrorMessageStyle{
+    color: red; 
+    font-size: 12px;
+    margin-top: .25rem; 
+    margin-bottom: 0rem; 
+    margin-left: .5rem;
 }
 
 .labelStyle{
@@ -88,12 +107,14 @@
     flex-direction: row;
     line-height: 2rem;
     margin-top: .5rem;
+    height: 2.5rem;
 
 }
 
 .inputBox{
     border-style: none;
     }
+
 
 .errorMessageStyle{
         color: red; 
@@ -250,15 +271,40 @@
 
 }
 
+.shippingMethodSection{
+    display: flex;
+    height: 8rem;
+    padding-top: 0rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+    padding-bottom: 0rem;
+}
 
+.shipMethodTitle{
+    height: 1rem;
+}
+.shippingMethodSectionRight{
+    display: flex;
+    width: 75%;
+}
+
+.shippingMethodSectionLeft{
+    display: flex;
+    width: 25%;
+}
+
+.shippingRadioContainer{
+    display: flex;
+    height: 3rem;
+}
 .shipDetailLink{
     color: red;
+    text-decoration: underline;
     font-weight: 400;
     text-align: right;
-    margin-right: 15rem;
-    margin-top: -2.75rem;
-    margin-bottom: 2rem;
-    width: 50rem;
+    padding-top: 4rem;
+    padding-bottom: 0;
+    height: 2rem
 }
 
 /* RIGHT PANEL */
@@ -352,7 +398,7 @@
 
 
 .summaryShippingCheckOutButton{
-    background-color: red;
+    background-color: rgb(194, 61, 61);
     color: white;
     border: none;
     border-radius: 3px;
@@ -360,4 +406,9 @@
     height: 2.5rem;
     justify-self: center;
     align-self: center;
+}
+
+.allErrorsCheck{
+    text-align: left;
+    color: red
 }

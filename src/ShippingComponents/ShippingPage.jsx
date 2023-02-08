@@ -8,100 +8,222 @@ import ShippingTelephoneFields from "../ShippingComponents/ShippingTelephoneFiel
 import ShippingCartSummary from "./ShippingCartSummary";
 import ShippingSummaryTotals from "./ShippingSummaryTotals";
 
+
+let myFunctions = require("./shippingFieldsValidations.js")
+
 class ShippingPage extends React.Component{
     constructor(props){ 
         super(props);
         this.state = {
             inputFieldsData: [
-                {label: "Address Title", inputID: "aTitle", type: "name", masked:"text", value:"", error:"", showError:false, key:"SH1"}, 
-                {label: "Name - Surname", inputID: "surname", type: "name", masked:"text", value:"", error:"", showError:false, key:"SH2"},
-                {label: "Your Address", inputID: "address", type: "address", masked:"text", value:"", error:"", showError:false, key:"SH3"},
-                {label: "Zip Code", inputID: "postCode", type:"zipCode",masked:"text", value:"", error:"", showError:false, key:"SH4"},
+                {label: "Address Title", inputID: "aTitle", type: "name", masked:"text", value: "", error:"", showError:false, key:"SH1"}, 
+                {label: "Name - Surname", inputID: "surname", type: "name", masked:"text", value: "" , error:"", showError:false, key:"SH2"},
+                {label: "Your Address", inputID: "address", type: "address", masked:"text", value: "", error:"", showError:false, key:"SH3"},
+                {label: "Zip Code", inputID: "postCode", type:"zipCode",masked:"text", value: "", error:"", showError:false, key:"SH4"},
                 ],
             
             dropDownFieldsData: [
-                {key:'SH6', label: "Country", inputID: "country", value:"", selection:["Select", "USA", "Other"]},
-                {key:'SH7', label: "City", inputID: "city", value:"", selection:["Select", "Los Angeles", "New York", "Other"]},
-                {key:'SH8', label: "State", inputID: "state", value:"", selection:["Select", "CA", "NY", "Other"]}
+                {key:'SH6', label: "Country", inputID: "country", value:"Select", selection:["Select", "USA", "Other"], error:"", showError:false},
+                {key:'SH7', label: "City", inputID: "city", value:"Select", selection:["Select", "Los Angeles", "New York", "Other"], error:"", showError:false},
+                {key:'SH8', label: "State", inputID: "state", value:"Select", selection:["Select", "CA", "NY", "Other"], error:"", showError:false}
             ],
 
             phoneFields:[
                 {key:'SH9', label: "Cell Phone", inputID: "cellNumber", type:"phone", value : "", areaCode: "", countryCode:"0",  error:"", showError:false},
                 {key:'SH10', label: "Telephone", inputID: "telNumber", type:"phone", value : "", areaCode: "", countryCode:"0", error:"", showError:false}
             ],
+
+            selectedShippingOption: "standard",
+
             shippingRadioOptions: [
-                {key:"SH11", id:"standard", name:"shipping", value:"standard", text1:"STANDARD", text2:"Delivery in 4-6 Business Days - Free ($40 min.)"},
-                {key:"SH12", id:"express", name:"shipping", value:"express", text1:"EXPRESS", text2:"Delivery in 1-3 Business Days - $5"}
-            ]
+                {key:"SH11", value:"standard", text1:"STANDARD", text2:"Delivery in 4-6 Business Days - Free ($40 min.)"},
+                {key:"SH12", value:"express", text1:"EXPRESS", text2:"Delivery in 1-3 Business Days - $5"}
+            ],
+            errorsExist: false
             }
+    }
+
+    handleInputValidations = (errorID, value, key)=>{
+        let textMessage =""
+        if(!value) {textMessage = "This field is required"; 
+        }else{
+            switch(errorID){
+                case "nameError":
+                    textMessage = myFunctions.nameValidation(value)
+
+                    break;
+                case "addressError": 
+                    textMessage = myFunctions.addressValidation(value) 
+
+                    break;
+                case "zipCodeError":
+                    textMessage = myFunctions.zipValidator(value)
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        let display = myFunctions.displayValidation(textMessage)
+
+        this.updateError(key, textMessage, display)
+    }
+
+    handlePhoneValidations = (value, index, countryCode, areaCode)=>{
+        let textMessage =""
+        let display = ""
+
+        if(!value) {textMessage = "This field is required";
+        display = true}
+            else{        
+        const phoneProperties = [{value: countryCode, regEx: /^\d{1}$/, error: "Country code must be 1 digits"}, 
+                                {value: areaCode, regEx: /^\d{3}?$/, error: "Area code must be 3 digits"},
+                                {value: value, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
+                                ]
+
+        let validationResults = phoneProperties.map((property)=>property.value.match(property.regEx) ? "" : property.error)
+        textMessage = validationResults.map((errorMessage)=> errorMessage.length > 0 ? <li key = {errorMessage}>{errorMessage}</li> : "")
+
+        display = textMessage.reduce((acc, currVal)=> {return currVal.length + acc.length;}, 0) > 0 ? true : false}
+
+        this.updatePhoneError(index, textMessage, display)
     }
 
     updatePhoneFieldsValueState = (value, index, fieldName) =>{
-        this.setState({phoneFields: this.state.phoneFields.map((field)=>{
-            if(index === field.key){
-                return {...field, [fieldName]: value} 
-            }
-            else{return field}
-        })}
+        this.resetLocalStorage("phoneFields")
+        this.setState(prevState => ({phoneFields: prevState.phoneFields.map((field)=>
+            index === field.key ? {...field, [fieldName]: value} : field
+        )})
         )
-
-        console.log(this.state.phoneFields)
     }
 
     updatePhoneError = (key, textMessage, display) =>{
-        this.setState({phoneFields: this.state.phoneFields.map((field)=>{
-            if(key === field.key){
-                return {...field, error: textMessage, showError: display} 
-            }
-            else{return field}
-        })}
+        this.setState(prevState => ({phoneFields: prevState.phoneFields.map((field)=>
+            key === field.key ? {...field, error: textMessage, showError: display} : field
+        )})
         )
     }
 
-    updateShippingRadioValueState = (value, index)=>{
-        this.setState({shippingRadioOptions: 
-            this.state.shippingRadioOptions.map((field)=>{
-                if(field.key === index){
-                    return {...field, value: value}}
-                else{return field}
-            })})}
+    updateShippingRadioValueState = (value)=>{
+        this.resetLocalStorage("selectedShippingOption")
+        this.setState(prevState => {return {selectedShippingOption: value}})
+    }
 
     updateDropdownValueState = (value, key) => {
-        this.setState({dropDownFieldsData: this.state.dropDownFieldsData.map((field)=>{ 
-            if(key === field.key){
-                return {...field, value: value} 
-            }
-            else{return field}
-        })})
+        this.resetLocalStorage("dropDownFieldsData")
+        this.setState(prevState => ({dropDownFieldsData: prevState.dropDownFieldsData.map((field)=> 
+            key === field.key ? {...field, value: value} : field
+        )}))
     }
 
     updateInputFieldsValueState = (value, key) =>{
-      
-        this.setState({inputFieldsData: this.state.inputFieldsData.map((field, index)=>{
-            if(key === field.key){
-                return {...field, value: value} 
-            }
-            else{return field}
-        })}
+        this.resetLocalStorage("inputFieldsData")
+        this.setState(prevState => ({inputFieldsData: prevState.inputFieldsData.map((field)=>
+            key === field.key ? {...field, value: value} : field
+        )})
         )
-        console.log(this.state.inputFieldsData)
     }
 
-   
+    resetLocalStorage(key) {
+        localStorage.removeItem(key);
+        }
 
     updateError = (key, textMessage, display) =>{
-        this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=>{
-            if(key === field.key){
-                return {...field, error: textMessage, showError: display} 
-            }
-            else{return field}
-        })}
+        this.setState(prevState => ({inputFieldsData: prevState.inputFieldsData.map(
+            (field)=>          
+            key === field.key ? {...field, error: textMessage, showError: display} : field
+       )})
         )
     }
 
- backToCart = () =>{
-    this.props.backToCart()
-}
+    backToCart = (e) =>{
+        this.saveToLocalStorage("inputFieldsData", this.state.inputFieldsData)
+        this.saveToLocalStorage("phoneFields", this.state.phoneFields)  
+        this.saveToLocalStorage("selectedShippingOption", this.state.selectedShippingOption)
+        this.saveToLocalStorage("dropDownFieldsData", this.state.dropDownFieldsData) 
+
+        this.props.updatePageDisplayed("cart")
+    }
+
+    openPaymentPage = (e) => {       
+        e.preventDefault()
+
+        this.state.inputFieldsData.forEach((field)=>{
+            const errorID = field.type + "Error"
+            const value = field.value ? field.value : ""
+            this.handleInputValidations(errorID, value, field.key)
+            })
+
+        this.state.phoneFields.forEach((field)=>{
+            this.handlePhoneValidations(field.value, field.key, field.countryCode, field.areaCode)})
+
+        this.state.dropDownFieldsData.forEach((field)=>{
+            this.handleDropDownValidation(field.value, field.key) })
+
+        setTimeout(() => {
+            let allDataFields = [...this.state.inputFieldsData, ...this.state.phoneFields, ...this.state.dropDownFieldsData]
+            let errorCount = 0;
+            
+            allDataFields.forEach((field)=>{
+               return field.showError === true ? errorCount++ : errorCount
+}                )
+            if(errorCount > 0){
+                this.setState({errorsExist: true})
+            }
+            else{
+                this.setState({errorsExist: false})
+                // this.props.updatePageDisplayed("paymentPage")
+                       
+                this.saveToLocalStorage("inputFieldsData", this.state.inputFieldsData)
+                this.saveToLocalStorage("phoneFields", this.state.phoneFields)  
+                this.saveToLocalStorage("selectedShippingOption", this.state.selectedShippingOption)
+                this.saveToLocalStorage("dropDownFieldsData", this.state.dropDownFieldsData) 
+                
+            }
+            }, 0)
+        
+    }
+
+    saveToLocalStorage(key, value){
+        localStorage.setItem(key, JSON.stringify(value))
+    }
+
+    handleDropDownValidation = (value, index) => {
+        this.setState(prevState => ({
+          dropDownFieldsData: prevState.dropDownFieldsData.map(field => {
+            let errorMessage = value === "Select" ? "Please select a " + field.label : "";
+            let showError = value === "Select" ? true : false;
+            if (index === field.key) {
+              return { ...field, error: errorMessage, showError: showError };
+            } else {
+              return field;
+            }
+          }),
+        }));
+      };
+
+    componentDidMount() {
+
+    let inputFieldsData = JSON.parse(localStorage.getItem("inputFieldsData")) ? 
+        JSON.parse(localStorage.getItem("inputFieldsData")) : this.state.inputFieldsData      
+
+    let dropDownFieldsData = JSON.parse(localStorage.getItem("dropDownFieldsData")) ? 
+        JSON.parse(localStorage.getItem("dropDownFieldsData")) : this.state.dropDownFieldsData  
+
+    let phoneFields = JSON.parse(localStorage.getItem("phoneFields")) ? 
+        JSON.parse(localStorage.getItem("phoneFields")) : this.state.phoneFields  
+    
+    let selectedShippingOption = JSON.parse(localStorage.getItem("selectedShippingOption")) ? 
+        JSON.parse(localStorage.getItem("selectedShippingOption")) : this.state.selectedShippingOption
+
+    this.setState(prevState => ({
+            inputFieldsData: inputFieldsData, 
+            dropDownFieldsData: dropDownFieldsData, 
+            phoneFields: phoneFields, 
+            selectedShippingOption: selectedShippingOption}))
+
+    }   
 
     render(){
         let cartSummaryTotals = JSON.parse(localStorage.getItem("cartFields")).map((item)=>  
@@ -111,20 +233,15 @@ class ShippingPage extends React.Component{
                 fieldTotal = {item.fieldTotal}
                 index = {item.key}
             />
-                // <div className="subtotalShippingSummary">
-                //     <p>{item.fieldLabel}:</p>
-                //     <strong className = {"shipping"+ item.key}>${item.fieldTotal}</strong>
-                // </div>
-            
+                
             )
-
-
 
         let cartSummaryItems = JSON.parse(localStorage.getItem("cartItems")).filter((item)=>
             {return item.cartItemQuantity > 0}).map((item)=>{
                 return (
 
                     <ShippingCartSummary 
+                        index = {item.key}
                         image = {item.image}
                         title = {item.cartItemTitle}
                         color = {item.cartItemColor}
@@ -133,8 +250,7 @@ class ShippingPage extends React.Component{
                         price = {item.cartItemTotalPrice}  
                     />
                 )
-            })
-      
+            })    
 
         let inputFields = this.state.inputFieldsData.map((field) => 
              {return <ShippingInputFields 
@@ -148,7 +264,8 @@ class ShippingPage extends React.Component{
                     ref = {this.inputRef}
                     error = {field.error}
                     showError = {field.showError}
-                    updateError = {this.updateError} 
+                    updateError = {this.updateError}
+                    handleValidations = {this.handleInputValidations}
                 
                 />})
 
@@ -166,7 +283,7 @@ class ShippingPage extends React.Component{
                     updateError = {this.updatePhoneError} 
                     areaCode = {field.areaCode}
                     countryCode = {field.countryCode}
-            
+                    handlePhoneValidations = {this.handlePhoneValidations}
                 />})
 
         let dropDownFields = this.state.dropDownFieldsData.map((field) =>{
@@ -181,22 +298,23 @@ class ShippingPage extends React.Component{
                 showError = {field.showError}
                 updateError = {this.updateError}
                 selection = {field.selection}
+                handleDropDownValidation = {this.handleDropDownValidation}
                 /> 
         })
         
         let shippingRadios = this.state.shippingRadioOptions.map((field) =>{
             return <ShippingRadios 
-                id = {field.id}
-                name = {field.name}
                 value = {field.value}
                 text1 = {field.text1}
                 text2 = {field.text2}
                 key = {field.key}
                 index = {field.key}
                 onChange = {this.updateShippingRadioValueState}
+                selectedShippingOption = {this.state.selectedShippingOption}
                 />
         })
         
+      
         return (
             <div className="shippingPageContainer">
 
@@ -214,22 +332,26 @@ class ShippingPage extends React.Component{
 
                             <div className="phoneContainer">
                                 {phoneFields}
+                                <hr className="Hr"/>
                             </div>
 
-                            <div>
-                                <hr className="Hr"/>
-                                <h3>SHIPPING METHOD </h3>
+                            <h3 className="shipMethodTitle">SHIPPING METHOD </h3>
+                            <div className = "shippingMethodSection">
+                                <div className="shippingMethodSectionRight">
                                     <div className="shippingRadioSection">
                                         {shippingRadios}
                                     </div>
-                            </div>
-
-                            <div className="shippingLinkContainer">
-                                <a className = "shipDetailLink" href="">View Shipping Details</a>
-                            </div>
+                                </div>
                                 
-                            <div className="backButtonContainer">
-                                <button className="backButton" onClick= {this.backToCart}>BACK TO CART</button>
+                                <div className="shippingMethodSectionLeft">
+                                    <div className="shippingLinkContainer">
+                                        <p className = "shipDetailLink">View Shipping Details</p>
+                                    </div>
+                                </div>
+                            </div>
+                                    
+                                <div className="backButtonContainer">
+                                    <button type = "button" className="backButton" onClick= {this.backToCart}>BACK TO CART</button>
                             </div>
                             
                     </div>
@@ -249,9 +371,11 @@ class ShippingPage extends React.Component{
                         {cartSummaryTotals}
                     </div>
                     <div className="summaryShippingCheckOutButtonDiv">
-                        <button className="summaryShippingCheckOutButton">CHECK OUT</button>
+                    {this.state.errorsExist && (<p className="allErrorsCheck">Please fill in all fields and correct all errors before moving on. </p>)}
+                        <button className="summaryShippingCheckOutButton" onClick = {this.openPaymentPage}>CHECK OUT</button>
                     </div>
                 </div>
+
             </div>
         )
     }

@@ -13,7 +13,7 @@ const passwordCheck = password => {
     )
 }
 
-const emailValidation = (email) => email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) ? "" : "Please enter a valid email."
+const emailValidation = (email) => email.match(/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/) ? "" : "Please enter a valid email."
 
 const zipValidator = (zip) => zip.match(/^\d{5}?$/) ? "" : "Please enter a five digit zip code."
 

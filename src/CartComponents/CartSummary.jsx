@@ -18,7 +18,7 @@ class CartSummary extends React.Component{
     // }
 
     openShippingPage = () => {
-        this.props.openShippingPage()    
+        this.props.openShippingPage("shipping")    
         this.props.handleSaveCart()
     }  
 
