@@ -12,7 +12,7 @@ class ShippingTelephoneFields extends React.Component{
         }
 
     handlePhoneValidations = (e)=>{
-            this.props.handlePhoneValidations(e.target.value, this.props.index, this.props.countryCode, this.props.areaCode)        
+            this.props.handlePhoneValidations(e.target.value, this.props.phone, this.props.index, this.props.countryCode, this.props.areaCode)        
     }
 
   

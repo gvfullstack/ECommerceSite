@@ -70,7 +70,7 @@ class ShippingPage extends React.Component{
         this.updateError(key, textMessage, display)
     }
 
-    handlePhoneValidations = (value, index, countryCode, areaCode)=>{
+    handlePhoneValidations = (value, phone, index, countryCode, areaCode)=>{
         let textMessage =""
         let display = ""
 
@@ -79,13 +79,17 @@ class ShippingPage extends React.Component{
             else{        
         const phoneProperties = [{value: countryCode, regEx: /^\d{1}$/, error: "Country code must be 1 digits"}, 
                                 {value: areaCode, regEx: /^\d{3}?$/, error: "Area code must be 3 digits"},
-                                {value: value, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
+                                {value: phone, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
                                 ]
 
         let validationResults = phoneProperties.map((property)=>property.value.match(property.regEx) ? "" : property.error)
-        textMessage = validationResults.map((errorMessage)=> errorMessage.length > 0 ? <li key = {errorMessage}>{errorMessage}</li> : "")
 
-        display = textMessage.reduce((acc, currVal)=> {return currVal.length + acc.length;}, 0) > 0 ? true : false}
+        textMessage = validationResults.map((errorMessage)=> errorMessage.length > 0 ? <li key = {errorMessage}>{errorMessage}</li> : "")
+        
+
+        display = textMessage.map((item) => item !== "" ? true : false)
+                            }
+        console.log("display", display)
 
         this.updatePhoneError(index, textMessage, display)
     }
@@ -156,7 +160,10 @@ class ShippingPage extends React.Component{
             })
 
         this.state.phoneFields.forEach((field)=>{
-            this.handlePhoneValidations(field.value, field.key, field.countryCode, field.areaCode)})
+            this.handlePhoneValidations(field.value, field.value, field.key, field.countryCode, field.areaCode)
+            this.handlePhoneValidations(field.countryCode, field.value, field.key, field.countryCode, field.areaCode)
+            this.handlePhoneValidations(field.areaCode, field.value, field.key, field.countryCode, field.areaCode)
+        })
 
         this.state.dropDownFieldsData.forEach((field)=>{
             this.handleDropDownValidation(field.value, field.key) })
@@ -173,13 +180,13 @@ class ShippingPage extends React.Component{
             }
             else{
                 this.setState({errorsExist: false})
-                // this.props.updatePageDisplayed("paymentPage")
-                       
+                
                 this.saveToLocalStorage("inputFieldsData", this.state.inputFieldsData)
                 this.saveToLocalStorage("phoneFields", this.state.phoneFields)  
                 this.saveToLocalStorage("selectedShippingOption", this.state.selectedShippingOption)
                 this.saveToLocalStorage("dropDownFieldsData", this.state.dropDownFieldsData) 
                 
+                this.props.updatePageDisplayed("paymentPage")
             }
             }, 0)
         
@@ -283,6 +290,7 @@ class ShippingPage extends React.Component{
                     updateError = {this.updatePhoneError} 
                     areaCode = {field.areaCode}
                     countryCode = {field.countryCode}
+                    phone = {field.value}
                     handlePhoneValidations = {this.handlePhoneValidations}
                 />})
 

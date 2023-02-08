@@ -180,7 +180,7 @@ class CartPage extends React.Component{
         let heading = headings.map((heading) => {return <p key={heading+random()}>{heading}</p>})
         let cartItems = this.state.cartItems.map((cartItem) => {
             return <ProductListItem 
-                    key={cartItem.key} 
+                    key={cartItem.key+random()} 
                     index = {cartItem.key}
                     cartItem={cartItem} 
                     updateProductTotals={this.updateProductTotals}
