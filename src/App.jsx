@@ -24,17 +24,7 @@ class App extends React.Component{
         this.setState({pageDisplay: val})
     }
 
-
-    openShippingPage = () =>{
-        this.setState({pageDisplay: "shipping"})
-        console.log(this.state.pageDisplay)
-    }
-
-    backToCart = () =>{
-        this.setState({pageDisplay: "cart"})
-        console.log(this.state.pageDisplay)
-    }
-
+  
     render(){
         return (
             <div>
@@ -52,7 +42,7 @@ class App extends React.Component{
             {(this.state.pageDisplay === "cart") &&  
                 <div>
                     <CartPage 
-                        openShippingPage={this.openShippingPage}/>
+                        openShippingPage={this.updatePageDisplayed}/>
                 </div>} 
 
 
@@ -60,10 +50,13 @@ class App extends React.Component{
                 <div>
                     <ShippingPage 
                         loggedInUser = {this.state.loggedInUser}
-                        backToCart = {this.backToCart}/>
+                        updatePageDisplayed={this.updatePageDisplayed}/>
                 </div>}
 
-                   
+            {(this.state.pageDisplay === "paymentPage") &&  
+                <div>
+                    HEWWO
+                </div>}                   
             
             </div>
         )

@@ -1,17 +1,9 @@
 import React from "react";
 import "./ShippingPage.css"
 
-let myFunctions = require("./shippingFieldsValidations.js")
 
 
 class ShippingInputFields extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            
-        }
-        this.updateInputState = this.updateInputState.bind(this)
-    }
 
     updateInputState = (e) => {
        
@@ -20,29 +12,8 @@ class ShippingInputFields extends React.Component{
         this.props.onChange(inputValue, key)
         }
 
-    handleValidations = (errorID, value, key)=>{
-        let textMessage =""
-       
-            switch(errorID){
-                case "nameError":
-                    textMessage = myFunctions.nameValidation(value)
-                    break;
-                case "addressError": 
-                    textMessage = myFunctions.addressValidation(value) 
-                    break;
-                case "zipCodeError":
-                    textMessage = myFunctions.zipValidator(value)
-                    break;
-                default:
-                    break;
-            }
-        
-        let display = myFunctions.displayValidation(textMessage)
-        this.props.updateError(key, textMessage, display)
-    }
-
     runValidations = (e) => {
-        this.handleValidations(e.target.dataset.type, e.target.value, this.props.index)
+        this.props.handleValidations(e.target.dataset.type, e.target.value, this.props.index)
     }
  
     render(){
@@ -51,7 +22,7 @@ class ShippingInputFields extends React.Component{
         let showError = this.props.showError
 
         return(
-            <div>
+            <div key = {this.props.index}>
 
             <div className = "divStyle" >
                

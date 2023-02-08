@@ -5,7 +5,7 @@ class ShippingCartSummary extends React.Component{
     
     render(){
         return(
-        <div className="cartSummaryItemDiv">
+        <div className="cartSummaryItemDiv" key = {this.props.index+"SCS"}>
             <div className="cartSummaryImgDiv">
                 <img src={this.props.image} alt="" />
             </div>
