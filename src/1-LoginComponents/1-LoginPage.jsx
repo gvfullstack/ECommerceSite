@@ -1,10 +1,10 @@
 import React from "react";
-import LoginInputFields from "../LoginComponents/LoginInputFields";
-import ToggleButton from "../LoginComponents/ToggleButton";
+import LoginInputFields from "../1-LoginComponents/LoginInputFields";
+import ToggleButton from "../1-LoginComponents/ToggleButton";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import {ReactComponent as FacebookLogo} from '../images/facebook-square.svg';
-import "../LoginComponents/loginFields.css"
+import "../1-LoginComponents/loginFields.css"
 
 const element = <FontAwesomeIcon icon={faEye} />
 
@@ -13,7 +13,6 @@ class LoginPage extends React.Component{
         super(props);
         this.state = {       
             inputRef : React.createRef(),
-            toggleButton: "signIn", 
             inputFieldsData: [
                 {key:"LP1",label: "Your E-Mail Address*", inputID: "email", visibility:"create", type: "email", masked:"text", value:"", error:"", showError:false}, 
                 {key:"LP2",label: "Create Password*", inputID: "password", visibility:"create", type: "password", icon:element, masked:"password", value:"", error:"", showError:false},
@@ -24,7 +23,8 @@ class LoginPage extends React.Component{
                 {key:"LP7",label: "Sign In E-Mail*", inputID: "signInEmail", visibility:"signIn", type: "email", masked:"text", value:"", error:"", showError:false},
                 {key:"LP8",label: "Sign In Password*", inputID: "signInPassword", visibility:"signIn", type: "passwordSignIn", icon:element, masked:"password", value:"", error:"", showError:false}
             ],
-            submitError: ""
+            saveUserError: "",
+            signInError: ""
         }
 
         this.updateToggleButton = this.updateToggleButton.bind(this)
@@ -67,20 +67,23 @@ class LoginPage extends React.Component{
 
         let errorMesage = "";
 
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+            console.log(users)
         if(validationErrorsExist.includes(true)){
             errorMesage = "Please correct all the errors before saving"
-            this.setState({submitError: errorMesage}) 
+            this.setState({saveUserError: errorMesage}) 
         }       
         
-        else if(this.props.users.map((user)=>{
+        else if(users.map((user)=>{
             let email = this.getSpecificField("email")
             return user.email === email ? true: false
         }).includes(true)){
             errorMesage = "This E-Mail address already exists"
-            this.setState({submitError: errorMesage})
+            this.setState({saveUserError: errorMesage})
             }
 
         else{
+            this.setState({saveUserError: ""})
             let newUserObj = {};
             
             this.state.inputFieldsData.forEach((field)=>{
@@ -93,8 +96,8 @@ class LoginPage extends React.Component{
                     })
             })
 
-            localStorage.setItem("user", JSON.stringify(newUserObj));
-            this.props.userAdd(newUserObj)
+            users.push(newUserObj)
+            localStorage.setItem("users", JSON.stringify(users));
         }
     }
 
@@ -103,19 +106,20 @@ class LoginPage extends React.Component{
         e.preventDefault()
         let email = this.getSpecificField("signInEmail")
         let password = this.getSpecificField("signInPassword")
-        let user = this.props.users.filter((user)=>{
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        let user = users.filter((user)=>{
             return user.email === email && user.password === password ? true: false
         })
+
         if(user.length === 0){
-            this.setState({submitError: "Wrong E-Mail or Password"})
+            this.setState({signInError: "Wrong E-Mail or Password"})
         }
         else{
-            this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=> {
-                return {...field, value:"", error:"", showError:false}
-                  })
-             })
-            console.log("you are signed in")
-            this.props.setLoggedInUser(email)
+            // this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=> {
+            //     return {...field, value:"", error:"", showError:false}
+            //       })
+            //  })
+            this.props.updatePageDisplayed("cart")
         }
     }
 
@@ -161,10 +165,20 @@ class LoginPage extends React.Component{
                             toggleButton = {this.props.pageDisplay}
                             stateUpdater = {this.updateToggleButton}/>
 
+                    <p>{inputFieldsData[0].value}</p>
+                    <p>{inputFieldsData[1].value}</p>
+
+                    <div className="errorMessageContainer">
+                            {this.saveUserError !== "" &&
+                            this.props.pageDisplay==="create"
+                            && (<p className="errorMessageButtonClick">{this.state.saveUserError}</p>)}
+                            
+                            {this.signInError !== "" &&
+                            this.props.pageDisplay==="signIn"
+                            && (<p className="errorMessageButtonClick">{this.state.signInError}</p>)}                    
+                    </div>
+                        
                     <form>
-                        {this.submitError !== "" &&
-                        this.props.pageDisplay==="signIn"
-                        && (<p className="errorMessageStyle">{this.state.submitError}</p>)}
                         {inputFields} 
                         <div className = "buttonContainer">
                         {this.props.pageDisplay==="create" && (<button className = "saveButton" onClick={this.handleSaveUser}>SAVE</button>)}

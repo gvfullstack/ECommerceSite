@@ -1,0 +1,87 @@
+.cstatusGraphic{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.ccircleBox,
+.clabelBox{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.ccirclesContainer,
+.clabelsContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    height: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ccirclesContainer{
+        border-bottom:rgb(223, 219, 219) solid;
+        border-width: .5rem;
+    }
+    
+.clabelsContainer{
+    height: 1rem;
+    width: 100%;
+}
+
+.ccirclesComplete,
+.ccircleLabelsComplete{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+.ccirclesComplete{  
+    border-bottom:rgb(77, 76, 76) solid;
+    border-width: .5rem;
+
+}
+
+.ccartCircle,
+.cdeliveryCircle, 
+.cpaymentCircle,
+.cconfirmationCircle{
+    margin-bottom: -1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 50px;
+}
+
+.cpaymentCircle,
+.ccartCircle,
+.cdeliveryCircle,
+.cconfirmationCircle{
+    background-color:rgb(77, 76, 76);
+    margin-left: -.25rem;
+    margin-right: -.25rem;
+
+}
+
+.ccartLabel,
+.cdeliveryLabel,
+.cpaymentLabel,
+.cconfirmationLabel{
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 7rem;
+    color: rgb(126, 122, 122);
+}
+

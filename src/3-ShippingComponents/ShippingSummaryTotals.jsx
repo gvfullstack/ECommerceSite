@@ -1,5 +1,5 @@
 import React from "react";  
-import "../ShippingComponents/ShippingPage.css"
+import "../3-ShippingComponents/1.1-ShippingPage.css"
 
 class ShippingSummaryTotals extends React.Component{
     render(){

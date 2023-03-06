@@ -15,7 +15,7 @@
     border-width: 1px;
     border-radius: 5px;
     padding: 1rem;
-    width: 60rem;
+    width: 70%;
     height: 58rem;
     box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
 
@@ -64,8 +64,7 @@
     justify-content: flex-end;
     margin-top: -2rem;
     height: 4rem;
-    margin-right: 9.25rem;
-    width: 100%;
+    width: 60%;
 }
 
 .shippingInfoDropdownContainer{
@@ -325,7 +324,7 @@
     flex-direction: column;
     margin-top: 2rem;
     padding: 1rem;
-    width: 25rem;
+    width: 25%;
     height: 58rem;
     box-shadow: 0 0 20px 10px rgba(234, 232, 232, 0.5);
 }
@@ -397,8 +396,8 @@
 }
 
 
-.summaryShippingCheckOutButton{
-    background-color: rgb(194, 61, 61);
+.summaryShippingCheckOutButtonDisabled,
+.summaryShippingCheckOutButtonEnabled{
     color: white;
     border: none;
     border-radius: 3px;
@@ -406,6 +405,16 @@
     height: 2.5rem;
     justify-self: center;
     align-self: center;
+}
+
+.summaryShippingCheckOutButtonDisabled{
+    background-color: rgb(155, 73, 73);
+
+}
+
+.summaryShippingCheckOutButtonEnabled{
+    background-color: rgb(194, 61, 61);
+    cursor: pointer;
 }
 
 .allErrorsCheck{

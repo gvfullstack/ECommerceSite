@@ -1,5 +1,5 @@
 import React from "react";
-import "../CartComponents/cartPage.css"
+import "../2-CartComponents/cartPage.css"
 
 class PromoCodeSection extends React.Component{
     constructor(props){

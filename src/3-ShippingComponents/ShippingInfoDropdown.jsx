@@ -11,10 +11,11 @@ class ShippingInfoDropdown extends React.Component{
         this.props.onChange(event.target.value, this.props.index)
     }
     render(){
+        
         return(
-            <div className = "shippingInfoDropdownContainer">
+            <div className = "shippingInfoDropdownContainer" key = {this.props.index}>
 
-                <div className="shippingInfoDropdown" key = {this.props.index}>
+                <div className="shippingInfoDropdown" >
                     <label className = "labelStyleDD">{this.props.label}</label>
                     <select 
                         className = {this.props.id} 

@@ -4,7 +4,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons'
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
-import "../ShippingComponents/ShippingStatusGraphic.css"
+import "../3-ShippingComponents/ShippingStatusGraphic.css"
 
 
 

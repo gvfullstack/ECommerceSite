@@ -1,5 +1,5 @@
 import React from "react";
-import "../CartComponents/cartPage.css"
+import "../2-CartComponents/cartPage.css"
 
 
 class CartSummaryTotals extends React.Component{

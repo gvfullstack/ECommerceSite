@@ -1,5 +1,5 @@
 import React from "react";
-import "../LoginComponents/loginFields.css"
+import "../1-LoginComponents/loginFields.css"
 
 
 class ToggleButton extends React.Component{
@@ -16,7 +16,7 @@ class ToggleButton extends React.Component{
 
     render(){
         return(
-            <div className = "toggleButtons">
+            <div className = "toggleButtons" key = "s65d432">
                 <label htmlFor="signIn" className = "toggleButton">
                     <input 
                         type = "radio" 
