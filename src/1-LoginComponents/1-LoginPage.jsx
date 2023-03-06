@@ -115,10 +115,7 @@ class LoginPage extends React.Component{
             this.setState({signInError: "Wrong E-Mail or Password"})
         }
         else{
-            // this.setState({inputFieldsData: this.state.inputFieldsData.map((field)=> {
-            //     return {...field, value:"", error:"", showError:false}
-            //       })
-            //  })
+           
             this.props.updatePageDisplayed("cart")
         }
     }
@@ -164,9 +161,6 @@ class LoginPage extends React.Component{
                     <ToggleButton 
                             toggleButton = {this.props.pageDisplay}
                             stateUpdater = {this.updateToggleButton}/>
-
-                    <p>{inputFieldsData[0].value}</p>
-                    <p>{inputFieldsData[1].value}</p>
 
                     <div className="errorMessageContainer">
                             {this.saveUserError !== "" &&
