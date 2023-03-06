@@ -1,10 +1,10 @@
 import React from "react";
-import ShippingStatusGraphic from "../ShippingComponents/ShippingStatusGraphic";
-import ShippingInputFields from "../ShippingComponents/ShippingInputFields";
-import ShippingInfoDropdown from "../ShippingComponents/ShippingInfoDropdown";
-import "../ShippingComponents/ShippingPage.css"
-import ShippingRadios from "../ShippingComponents/ShippingRadios";
-import ShippingTelephoneFields from "../ShippingComponents/ShippingTelephoneFields";
+import ShippingStatusGraphic from "../3-ShippingComponents/ShippingStatusGraphic";
+import ShippingInputFields from "../3-ShippingComponents/ShippingInputFields";
+import ShippingInfoDropdown from "../3-ShippingComponents/ShippingInfoDropdown";
+import "../3-ShippingComponents/1.1-ShippingPage.css"
+import ShippingRadios from "../3-ShippingComponents/ShippingRadios";
+import ShippingTelephoneFields from "../3-ShippingComponents/ShippingTelephoneFields";
 import ShippingCartSummary from "./ShippingCartSummary";
 import ShippingSummaryTotals from "./ShippingSummaryTotals";
 
@@ -29,8 +29,8 @@ class ShippingPage extends React.Component{
             ],
 
             phoneFields:[
-                {key:'SH9', label: "Cell Phone", inputID: "cellNumber", type:"phone", value : "", areaCode: "", countryCode:"0",  error:"", showError:false},
-                {key:'SH10', label: "Telephone", inputID: "telNumber", type:"phone", value : "", areaCode: "", countryCode:"0", error:"", showError:false}
+                {key:'SH9', label: "Cell Phone", inputID: "cellNumber", type:"phone", value : "", areaCode: "", countryCode:"0",  error:[""], showError:false},
+                {key:'SH10', label: "Telephone", inputID: "telNumber", type:"phone", value : "", areaCode: "", countryCode:"0", error:[""], showError:false}
             ],
 
             selectedShippingOption: "standard",
@@ -39,7 +39,8 @@ class ShippingPage extends React.Component{
                 {key:"SH11", value:"standard", text1:"STANDARD", text2:"Delivery in 4-6 Business Days - Free ($40 min.)"},
                 {key:"SH12", value:"express", text1:"EXPRESS", text2:"Delivery in 1-3 Business Days - $5"}
             ],
-            errorsExist: false
+            checkOutButtonStatusDisabled: true, 
+            displayFinalError: false,    
             }
     }
 
@@ -68,30 +69,52 @@ class ShippingPage extends React.Component{
         let display = myFunctions.displayValidation(textMessage)
 
         this.updateError(key, textMessage, display)
+        this.checkEnableCheckOutButton()
+
+    }
+
+    checkEnableCheckOutButton = () =>{
+        
+        let inputFieldsBool = this.state.inputFieldsData.map((field)=> field.value.length > 0 && !field.showError ? true: false)
+        //result is an array of booleans i.e. [true, true, true, true] or [true, true, true, false]
+        let dropDownFieldsBool = this.state.dropDownFieldsData.map((field)=> {
+        return field.value !== "Select"  && !field.showError ? true: false})
+        //result is an array of booleans i.e. [true, true, true, true] or [true, true, true, false]
+        let phoneFieldsBool = this.state.phoneFields.map((field)=> {
+            return field.value.length > 0 && field.areaCode.length > 0 
+            && field.countryCode.length > 0 && !field.showError ? true: false})
+
+        let allFieldsBool = [...inputFieldsBool, ...dropDownFieldsBool, ...phoneFieldsBool]
+        
+        if(allFieldsBool.every((item)=> item === true)){
+            this.setState(prevState => ({...prevState, checkOutButtonStatusDisabled: false, displayFinalError: false}))
+        }else{this.setState(prevState => ({...prevState, checkOutButtonStatusDisabled: true}))}    
     }
 
     handlePhoneValidations = (value, phone, index, countryCode, areaCode)=>{
-        let textMessage =""
+        let textMessage = []
         let display = ""
 
-        if(!value) {textMessage = "This field is required";
-        display = true}
-            else{        
-        const phoneProperties = [{value: countryCode, regEx: /^\d{1}$/, error: "Country code must be 1 digits"}, 
-                                {value: areaCode, regEx: /^\d{3}?$/, error: "Area code must be 3 digits"},
-                                {value: phone, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
-                                ]
+        if(!value) {textMessage = ["All three fields required"]; 
+                display = true}
+        else{        
+            const phoneProperties = [{value: countryCode, regEx: /^\d{1}$/, error: "Country code must be 1 digits"}, 
+                                    {value: areaCode, regEx: /^\d{3}?$/, error: "Area code must be 3 digits"},
+                                    {value: phone, regEx: /^\d{3}-\d{4}?$/, error: "Phone number must be 7 digits in format: xxx-xxxx"}
+                                    ]
 
-        let validationResults = phoneProperties.map((property)=>property.value.match(property.regEx) ? "" : property.error)
-
-        textMessage = validationResults.map((errorMessage)=> errorMessage.length > 0 ? <li key = {errorMessage}>{errorMessage}</li> : "")
-        
-
-        display = textMessage.map((item) => item !== "" ? true : false)
-                            }
-        console.log("display", display)
+            let validationResults = phoneProperties.map((property)=>
+                property.value.match(property.regEx) ? "" : property.error)
+            
+            validationResults.forEach((errorMessage)=> 
+                errorMessage.length > 0 ? textMessage.push(errorMessage): null)
+            
+            display = textMessage.length > 0 ? true : false
+            }
 
         this.updatePhoneError(index, textMessage, display)
+        this.checkEnableCheckOutButton()
+
     }
 
     updatePhoneFieldsValueState = (value, index, fieldName) =>{
@@ -103,15 +126,17 @@ class ShippingPage extends React.Component{
     }
 
     updatePhoneError = (key, textMessage, display) =>{
-        this.setState(prevState => ({phoneFields: prevState.phoneFields.map((field)=>
+        this.setState(prevState => ({...prevState, phoneFields: prevState.phoneFields.map((field)=>
             key === field.key ? {...field, error: textMessage, showError: display} : field
         )})
         )
     }
 
+    
+
     updateShippingRadioValueState = (value)=>{
         this.resetLocalStorage("selectedShippingOption")
-        this.setState(prevState => {return {selectedShippingOption: value}})
+        this.setState({selectedShippingOption: value})
     }
 
     updateDropdownValueState = (value, key) => {
@@ -134,7 +159,7 @@ class ShippingPage extends React.Component{
         }
 
     updateError = (key, textMessage, display) =>{
-        this.setState(prevState => ({inputFieldsData: prevState.inputFieldsData.map(
+        this.setState(prevState => ({...prevState, inputFieldsData: prevState.inputFieldsData.map(
             (field)=>          
             key === field.key ? {...field, error: textMessage, showError: display} : field
        )})
@@ -146,11 +171,13 @@ class ShippingPage extends React.Component{
         this.saveToLocalStorage("phoneFields", this.state.phoneFields)  
         this.saveToLocalStorage("selectedShippingOption", this.state.selectedShippingOption)
         this.saveToLocalStorage("dropDownFieldsData", this.state.dropDownFieldsData) 
+        this.saveToLocalStorage("shippingRadioOptions", this.state.shippingRadioOptions) 
+        this.saveToLocalStorage("checkOutButtonStatusDisabled", this.state.checkOutButtonStatusDisabled) 
 
         this.props.updatePageDisplayed("cart")
     }
 
-    openPaymentPage = (e) => {       
+    openPaymentPage = (e) => {  
         e.preventDefault()
 
         this.state.inputFieldsData.forEach((field)=>{
@@ -171,21 +198,22 @@ class ShippingPage extends React.Component{
         setTimeout(() => {
             let allDataFields = [...this.state.inputFieldsData, ...this.state.phoneFields, ...this.state.dropDownFieldsData]
             let errorCount = 0;
-            
+            console.log(errorCount)
             allDataFields.forEach((field)=>{
                return field.showError === true ? errorCount++ : errorCount
 }                )
             if(errorCount > 0){
-                this.setState({errorsExist: true})
+                this.setState(prevState => ({...prevState, displayFinalError: true}))
             }
             else{
-                this.setState({errorsExist: false})
+                this.setState({displayFinalError: false})
                 
                 this.saveToLocalStorage("inputFieldsData", this.state.inputFieldsData)
                 this.saveToLocalStorage("phoneFields", this.state.phoneFields)  
                 this.saveToLocalStorage("selectedShippingOption", this.state.selectedShippingOption)
                 this.saveToLocalStorage("dropDownFieldsData", this.state.dropDownFieldsData) 
-                
+                this.saveToLocalStorage("shippingRadioOptions", this.state.shippingRadioOptions) 
+                this.saveToLocalStorage("checkOutButtonStatusDisabled", this.state.checkOutButtonStatusDisabled) 
                 this.props.updatePageDisplayed("paymentPage")
             }
             }, 0)
@@ -208,28 +236,33 @@ class ShippingPage extends React.Component{
             }
           }),
         }));
+        this.checkEnableCheckOutButton()
       };
 
     componentDidMount() {
 
-    let inputFieldsData = JSON.parse(localStorage.getItem("inputFieldsData")) ? 
-        JSON.parse(localStorage.getItem("inputFieldsData")) : this.state.inputFieldsData      
+        let inputFieldsData = JSON.parse(localStorage.getItem("inputFieldsData")) ? 
+            JSON.parse(localStorage.getItem("inputFieldsData")) : this.state.inputFieldsData      
 
-    let dropDownFieldsData = JSON.parse(localStorage.getItem("dropDownFieldsData")) ? 
-        JSON.parse(localStorage.getItem("dropDownFieldsData")) : this.state.dropDownFieldsData  
+        let dropDownFieldsData = JSON.parse(localStorage.getItem("dropDownFieldsData")) ? 
+            JSON.parse(localStorage.getItem("dropDownFieldsData")) : this.state.dropDownFieldsData  
 
-    let phoneFields = JSON.parse(localStorage.getItem("phoneFields")) ? 
-        JSON.parse(localStorage.getItem("phoneFields")) : this.state.phoneFields  
-    
-    let selectedShippingOption = JSON.parse(localStorage.getItem("selectedShippingOption")) ? 
-        JSON.parse(localStorage.getItem("selectedShippingOption")) : this.state.selectedShippingOption
+        let phoneFields = JSON.parse(localStorage.getItem("phoneFields")) ? 
+            JSON.parse(localStorage.getItem("phoneFields")) : this.state.phoneFields  
+        
+        let selectedShippingOption = JSON.parse(localStorage.getItem("selectedShippingOption")) ? 
+            JSON.parse(localStorage.getItem("selectedShippingOption")) : this.state.selectedShippingOption
 
-    this.setState(prevState => ({
-            inputFieldsData: inputFieldsData, 
-            dropDownFieldsData: dropDownFieldsData, 
-            phoneFields: phoneFields, 
-            selectedShippingOption: selectedShippingOption}))
+        let checkOutButtonStatusDisabled = JSON.parse(localStorage.getItem("checkOutButtonStatusDisabled")) ? 
+            JSON.parse(localStorage.getItem("checkOutButtonStatusDisabled")) : this.state.checkOutButtonStatusDisabled 
 
+        this.setState(prevState => ({...prevState,
+                inputFieldsData: inputFieldsData, 
+                dropDownFieldsData: dropDownFieldsData, 
+                phoneFields: phoneFields, 
+                selectedShippingOption: selectedShippingOption,
+                checkOutButtonStatusDisabled: checkOutButtonStatusDisabled}))
+           
     }   
 
     render(){
@@ -322,7 +355,8 @@ class ShippingPage extends React.Component{
                 />
         })
         
-      
+        let checkoutButtonClass = this.state.checkOutButtonStatusDisabled ? "summaryShippingCheckOutButtonDisabled" : "summaryShippingCheckOutButtonEnabled" 
+
         return (
             <div className="shippingPageContainer">
 
@@ -379,8 +413,13 @@ class ShippingPage extends React.Component{
                         {cartSummaryTotals}
                     </div>
                     <div className="summaryShippingCheckOutButtonDiv">
-                    {this.state.errorsExist && (<p className="allErrorsCheck">Please fill in all fields and correct all errors before moving on. </p>)}
-                        <button className="summaryShippingCheckOutButton" onClick = {this.openPaymentPage}>CHECK OUT</button>
+                    {this.state.displayFinalError && (<p className="allErrorsCheck">Please fill in all fields and correct all errors before moving on. </p>)}
+                        <button 
+                            disabled = {this.state.checkOutButtonStatusDisabled}
+                            className= {checkoutButtonClass}
+                            onClick = {this.openPaymentPage}>
+                                CHECK OUT
+                        </button>
                     </div>
                 </div>
 

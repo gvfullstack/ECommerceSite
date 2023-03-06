@@ -1,21 +1,9 @@
 import React from "react";
-import PromoCodeSection from "../CartComponents/PromoCode";
-import CartSummaryTotals from "../CartComponents/CartSummaryTotals";
+import PromoCodeSection from "../2-CartComponents/PromoCode";
+import CartSummaryTotals from "../2-CartComponents/CartSummaryTotals";
 
 
 class CartSummary extends React.Component{
-    // constructor(props){
-    //     super(props)
-    //     this.state = {
-    //         buttonClassName: "checkoutButtonDisabled"
-    //     }
-    // }
-    
-    // componentDidMount() {
-
-    //     this.setState({buttonClassName: JSON.parse(localStorage.getItem("checkOutButtonDisabled")) ? "checkoutButtonDisabled" : "checkoutButton"})
-    //     console.log(this.state.buttonClassName)
-    // }
 
     openShippingPage = () => {
         this.props.openShippingPage("shipping")    

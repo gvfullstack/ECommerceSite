@@ -1,8 +1,8 @@
 import React from "react";
-import "../LoginComponents/loginFields.css"
+import "../1-LoginComponents/loginFields.css"
 
 
-let myFunctions = require("../LoginComponents/userCredentialValidations")
+let myFunctions = require("../1-LoginComponents/userCredentialValidations")
 
 
 class LoginInputFields extends React.Component{
@@ -70,7 +70,8 @@ class LoginInputFields extends React.Component{
         const errorID = this.props.inputtype + "Error"
         let showError = this.props.showError
         return(
-            <div>
+            
+            <div  key = {this.props.uniqueId}>
 
             {visibility === toggleButton &&
            ( <div className = "divStyle" >
@@ -84,7 +85,6 @@ class LoginInputFields extends React.Component{
                         id = {this.props.id} 
                         data-type ={errorID}
                         value = {this.props.value}
-                        key = {this.props.uniqueId}
                         onBlur = {this.runValidations}
                         ref = {this.props.ref}
                         />

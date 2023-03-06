@@ -1,24 +1,20 @@
 import React from "react";
-import LoginPage from "./LoginComponents/LoginPage";
-import CartPage from "./CartComponents/CartPage";
-import ShippingPage from "./ShippingComponents/ShippingPage";
-
+import LoginPage from "./1-LoginComponents/1-LoginPage";
+import CartPage from "./2-CartComponents/1-CartPage";
+import ShippingPage from "./3-ShippingComponents/1-ShippingPage";
+import PaymentPage from "./4-PaymentComponents/1-PaymentPage";
+import ConfirmationPage from "./5-ConfirmationComponents/1-ConfirmationPage";
 
 class App extends React.Component{ 
     constructor(props){
         super(props)
         this.state = {
-            users: [], 
-            pageDisplay: "cart",
+            pageDisplay: "signIn",
             loggedInUser: []
         }
     }
 
   
-    handleNewUserAdd = (newUser) => {
-        this.setState({users: [...this.state.users, newUser]})
-        console.log(this.state.users)
-    }
     
     updatePageDisplayed = (val)=>{
         this.setState({pageDisplay: val})
@@ -34,8 +30,7 @@ class App extends React.Component{
                         users = {this.state.users} 
                         userAdd = {this.handleNewUserAdd} 
                         pageDisplay = {this.state.pageDisplay} 
-                        updatePageDisplayed = {this.updatePageDisplayed}
-                        setLoggedInUser = {this.setLoggedInUser}/> 
+                        updatePageDisplayed = {this.updatePageDisplayed}></LoginPage>
                 </div>
             } 
 
@@ -55,7 +50,15 @@ class App extends React.Component{
 
             {(this.state.pageDisplay === "paymentPage") &&  
                 <div>
-                    HEWWO
+                    <PaymentPage 
+                        updatePageDisplayed={this.updatePageDisplayed}/>
+
+                </div>} 
+            {(this.state.pageDisplay === "confirmationPage") &&  
+                <div>
+                    <ConfirmationPage 
+                        updatePageDisplayed={this.updatePageDisplayed}/>
+
                 </div>}                   
             
             </div>
